@@ -18,6 +18,8 @@ class ArithLexer:
         "area_retangulo": "NAME",
         "area_quadrado": "NAME",
         "fib": "NAME",
+        "mais2": "NAME",
+        "somatorio": "NAME",
     }
 
     t_CONCAT = r"<>"

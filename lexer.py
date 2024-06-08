@@ -11,7 +11,7 @@ class ArithLexer:
     # States for multi-line comments
     states = (("multilinecomment", "exclusive"),)
 
-    reserved_words = {
+    function_names = {
         "soma": "NAME",
         "soma2": "NAME",
         "area": "NAME",
@@ -52,14 +52,14 @@ class ArithLexer:
 
     def t_VARIAVEL(self, t):
         r"[a-z_][a-zA-Z0-9_]*(?:[!?])?"
-        if t.value in self.reserved_words:
-            t.type = self.reserved_words[t.value]
+        if t.value in self.function_names:
+            t.type = self.function_names[t.value]
         return t
 
     def t_NAME(self, t):
         r"[a-z][a-z0-9]*"
-        if t.value in self.reserved_words:
-            t.type = self.reserved_words[t.value]
+        if t.value in self.function_names:
+            t.type = self.function_names[t.value]
         return t
 
     def t_FUNCAO(self, t):

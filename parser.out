@@ -1,5 +1,9 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
+Unused terminals:
+
+    INTERPOLATED_STR
+
 Grammar
 
 Rule 0     S' -> Rec
@@ -447,6 +451,7 @@ state 21
     ]               reduce using rule 16 (expression -> func_call .)
     ;               reduce using rule 16 (expression -> func_call .)
 
+    expression_ops                 shift and go to state 39
 
 state 22
 
@@ -495,6 +500,7 @@ state 24
     ]               reduce using rule 24 (expression_ops -> NUM .)
     FIM             reduce using rule 24 (expression_ops -> NUM .)
 
+    arg                            shift and go to state 41
 
 state 25
 
@@ -640,6 +646,7 @@ state 34
 
   ! ;               [ reduce using rule 17 (expression -> list .) ]
 
+    expression_ops                 shift and go to state 47
 
 state 35
 
@@ -647,6 +654,7 @@ state 35
 
     ;               reduce using rule 12 (variavel -> VARIAVEL = expression .)
 
+    expression_ops                 shift and go to state 48
 
 state 36
 
@@ -664,6 +672,7 @@ state 36
     /               shift and go to state 43
     CONCAT          shift and go to state 44
 
+    expression_ops                 shift and go to state 49
 
 state 37
 
@@ -680,6 +689,7 @@ state 37
     ]               reduce using rule 25 (expression_ops -> STR .)
     FIM             reduce using rule 25 (expression_ops -> STR .)
 
+    expression_ops                 shift and go to state 50
 
 state 38
 
@@ -840,6 +850,7 @@ state 45
   ! /               [ shift and go to state 43 ]
   ! CONCAT          [ shift and go to state 44 ]
 
+    expression_ops                 shift and go to state 56
 
 state 46
 
@@ -944,6 +955,7 @@ state 52
     ,               reduce using rule 32 (element -> expression .)
     ]               reduce using rule 32 (element -> expression .)
 
+    arg                            shift and go to state 58
 
 state 53
 

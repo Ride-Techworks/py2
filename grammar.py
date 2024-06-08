@@ -1,5 +1,7 @@
 import re
 from lexer import ArithLexer
+import re
+from lexer import ArithLexer
 import ply.yacc as yacc
 from pprint import PrettyPrinter
 import random
@@ -11,7 +13,7 @@ pp = PrettyPrinter()
 class ArithGrammar:
     tokens = ArithLexer.tokens
 
-    _variaveis = {}
+    _variables = {}
 
     precedence = (
         ("left", "CONCAT"),
@@ -45,6 +47,19 @@ class ArithGrammar:
         """
         if len(p) == 4 and p[1] != "ESCREVER":
             p[0] = p[2]
+        elif len(p) == 5 and isinstance(p[3], dict) and p[3].get("func") == "ALEATORIO":
+            self._variables[p[1]] = random.randint(0, p[3]["arg"])
+            p[0] = {"op": "declare", "var_name": p[1], "value": self._variables[p[1]]}
+        elif len(p) == 4 and p[1] == "ESCREVER":
+            if Utils.has_interpolation(str(p[2])):
+                interpolated = Utils.replace_interpolation(p[2], self._variables)
+                p[0] = {"op": "print", "value": p[2]}
+                print(interpolated)
+            else:
+                p[0] = {"op": "print", "value": p[2]}
+                print(p[2])
+        elif len(p) == 7 and p[3] == "ENTRADA":
+            self._variables[p[1]] = input("Enter value: ")
 
         elif (
             len(p) == 5

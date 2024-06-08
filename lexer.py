@@ -108,5 +108,8 @@ class ArithLexer:
     def input(self, string: str) -> None:
         self.lexer.input(string)
 
+    def input(self, string: str) -> None:
+        self.lexer.input(string)
+
     def token(self):
         return self.lexer.token()

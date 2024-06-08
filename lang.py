@@ -8,7 +8,6 @@ class Lang:
         "NAME",
         "ALEATORIO",
         "ESCREVER",
-        "INTERPOLATED_STR",
         "ENTRADA",
         "CONCAT",
     )
@@ -31,5 +30,8 @@ class Lang:
         "<",
         ">",
         "#",
+        "[",
+        "]",
     )
-    t_ignore = " \t"
+    t_ignore = " \n\t"
+    t_multilinecomment_ignore = " \t"

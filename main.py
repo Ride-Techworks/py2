@@ -21,8 +21,6 @@ def main():
 
     ast = parser.parse(data, variables)
 
-    print(ast)
-
     if ast is not None:
         # Interpret the input
         print(ast)

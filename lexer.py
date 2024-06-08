@@ -5,10 +5,20 @@ from lang import Lang
 class ArithLexer:
     tokens: tuple = Lang.tokens
     literals = Lang.literals
-    t_ignore = " "
+    t_ignore = Lang.t_ignore
+    t_multilinecomment_ignore = Lang.t_multilinecomment_ignore
 
     # States for multi-line comments
     states = (("multilinecomment", "exclusive"),)
+
+    reserved_words = {
+        "soma": "NAME",
+        "soma2": "NAME",
+        "area": "NAME",
+        "area_retangulo": "NAME",
+        "area_quadrado": "NAME",
+        "fib": "NAME",
+    }
 
     t_CONCAT = r"<>"
 
@@ -40,10 +50,14 @@ class ArithLexer:
 
     def t_VARIAVEL(self, t):
         r"[a-z_][a-zA-Z0-9_]*(?:[!?])?"
+        if t.value in self.reserved_words:
+            t.type = self.reserved_words[t.value]
         return t
 
     def t_NAME(self, t):
-        r"[a-z_][a-zA-Z0-9_]*"
+        r"[a-z][a-z0-9]*"
+        if t.value in self.reserved_words:
+            t.type = self.reserved_words[t.value]
         return t
 
     def t_FUNCAO(self, t):
@@ -90,6 +104,9 @@ class ArithLexer:
 
     def build(self) -> None:
         self.lexer = lex.lex(module=self)
+
+    def input(self, string: str) -> None:
+        self.lexer.input(string)
 
     def input(self, string: str) -> None:
         self.lexer.input(string)

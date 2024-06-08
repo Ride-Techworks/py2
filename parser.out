@@ -1,1118 +1,976 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
+Unused terminals:
+
+    INTERPOLATED_STR
+
 Grammar
 
-Rule 0     S' -> program
-Rule 1     program -> statement_list
-Rule 2     statement_list -> statement_list statement
-Rule 3     statement_list -> statement
-Rule 4     statement_list -> empty
-Rule 5     statement -> assignment SEMI
-Rule 6     statement -> statement_expr SEMI
-Rule 7     statement -> function_declaration
-Rule 8     statement_expr -> ESCREVER LPAREN expression RPAREN
-Rule 9     statement_expr -> ALEATORIO LPAREN NUM RPAREN
-Rule 10    statement_expr -> ENTRADA LPAREN RPAREN
-Rule 11    statement_expr -> function_call
-Rule 12    assignment -> VARIAVEL EQUALS expression
-Rule 13    expression -> expr
-Rule 14    expr -> expr PLUS term
-Rule 15    expr -> expr MINUS term
-Rule 16    expr -> expr CONCAT term
-Rule 17    expr -> term
-Rule 18    term -> term TIMES factor
-Rule 19    term -> term DIVIDE factor
-Rule 20    term -> factor
-Rule 21    factor -> NUM
-Rule 22    factor -> LPAREN expression RPAREN
-Rule 23    factor -> STR
-Rule 24    factor -> VARIAVEL
-Rule 25    factor -> list
-Rule 26    list -> LBRACKET elements RBRACKET
-Rule 27    elements -> expression
-Rule 28    elements -> elements COMMA expression
-Rule 29    function_declaration -> FUNCAO VARIAVEL LPAREN parameter_list RPAREN COLON statement_list FIM
-Rule 30    function_call -> VARIAVEL LPAREN argument_list RPAREN
-Rule 31    argument_list -> expression
-Rule 32    argument_list -> argument_list COMMA expression
-Rule 33    parameter_list -> VARIAVEL
-Rule 34    parameter_list -> parameter_list COMMA VARIAVEL
-Rule 35    empty -> <empty>
+Rule 0     S' -> Rec
+Rule 1     Rec -> Start
+Rule 2     Rec -> Rec Start
+Rule 3     Start -> ComandosIniciais
+Rule 4     ComandosIniciais -> ESCREVER escrever ;
+Rule 5     ComandosIniciais -> variavel ;
+Rule 6     ComandosIniciais -> FUNCAO funcao FIM
+Rule 7     ComandosIniciais -> VARIAVEL = func_call ;
+Rule 8     ComandosIniciais -> VARIAVEL = ENTRADA ( ) ;
+Rule 9     escrever -> ( expression )
+Rule 10    variavel -> VARIAVEL = expression
+Rule 11    expression -> expression_ops
+Rule 12    expression -> STR
+Rule 13    expression -> VARIAVEL
+Rule 14    expression_ops -> expression_ops + expression_ops
+Rule 15    expression_ops -> expression_ops - expression_ops
+Rule 16    expression_ops -> expression_ops * expression_ops
+Rule 17    expression_ops -> expression_ops / expression_ops
+Rule 18    expression_ops -> expression_ops CONCAT expression_ops
+Rule 19    expression_ops -> ( expression_ops )
+Rule 20    expression_ops -> NUM
+Rule 21    expression_ops -> STR
+Rule 22    expression_ops -> VARIAVEL
+Rule 23    expression_ops -> - expression_ops
+Rule 24    funcao -> NAME ( arg )
+Rule 25    func_call -> ALEATORIO ( expression_ops )
+Rule 26    func_call -> ESCREVER ( expression_ops )
+Rule 27    func_call -> ESCREVER ( STR )
+Rule 28    arg -> NAME
+Rule 29    arg -> NAME , arg
 
 Terminals, with rules where they appear
 
-ALEATORIO            : 9
-COLON                : 29
-COMMA                : 28 32 34
-CONCAT               : 16
-DIVIDE               : 19
-ENTRADA              : 10
-EQUALS               : 12
-ESCREVER             : 8
-FIM                  : 29
-FUNCAO               : 29
-LBRACKET             : 26
-LPAREN               : 8 9 10 22 29 30
-MINUS                : 15
-NUM                  : 9 21
-PLUS                 : 14
-RBRACKET             : 26
-RPAREN               : 8 9 10 22 29 30
-SEMI                 : 5 6
-STR                  : 23
-TIMES                : 18
-VARIAVEL             : 12 24 29 30 33 34
+(                    : 8 9 19 24 25 26 27
+)                    : 8 9 19 24 25 26 27
+*                    : 16
++                    : 14
+,                    : 29
+-                    : 15 23
+/                    : 17
+;                    : 4 5 7 8
+=                    : 7 8 10
+ALEATORIO            : 25
+CONCAT               : 18
+ENTRADA              : 8
+ESCREVER             : 4 26 27
+FIM                  : 6
+FUNCAO               : 6
+INTERPOLATED_STR     : 
+NAME                 : 24 28 29
+NUM                  : 20
+STR                  : 12 21 27
+VARIAVEL             : 7 8 10 13 22
 error                : 
 
 Nonterminals, with rules where they appear
 
-argument_list        : 30 32
-assignment           : 5
-elements             : 26 28
-empty                : 4
-expr                 : 13 14 15 16
-expression           : 8 12 22 27 28 31 32
-factor               : 18 19 20
-function_call        : 11
-function_declaration : 7
-list                 : 25
-parameter_list       : 29 34
-program              : 0
-statement            : 2 3
-statement_expr       : 6
-statement_list       : 1 2 29
-term                 : 14 15 16 17 18 19
+ComandosIniciais     : 3
+Rec                  : 2 0
+Start                : 1 2
+arg                  : 24 29
+escrever             : 4
+expression           : 9 10
+expression_ops       : 11 14 14 15 15 16 16 17 17 18 18 19 23 25 26
+func_call            : 7
+funcao               : 6
+variavel             : 5
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . program
-    (1) program -> . statement_list
-    (2) statement_list -> . statement_list statement
-    (3) statement_list -> . statement
-    (4) statement_list -> . empty
-    (5) statement -> . assignment SEMI
-    (6) statement -> . statement_expr SEMI
-    (7) statement -> . function_declaration
-    (35) empty -> .
-    (12) assignment -> . VARIAVEL EQUALS expression
-    (8) statement_expr -> . ESCREVER LPAREN expression RPAREN
-    (9) statement_expr -> . ALEATORIO LPAREN NUM RPAREN
-    (10) statement_expr -> . ENTRADA LPAREN RPAREN
-    (11) statement_expr -> . function_call
-    (29) function_declaration -> . FUNCAO VARIAVEL LPAREN parameter_list RPAREN COLON statement_list FIM
-    (30) function_call -> . VARIAVEL LPAREN argument_list RPAREN
+    (0) S' -> . Rec
+    (1) Rec -> . Start
+    (2) Rec -> . Rec Start
+    (3) Start -> . ComandosIniciais
+    (4) ComandosIniciais -> . ESCREVER escrever ;
+    (5) ComandosIniciais -> . variavel ;
+    (6) ComandosIniciais -> . FUNCAO funcao FIM
+    (7) ComandosIniciais -> . VARIAVEL = func_call ;
+    (8) ComandosIniciais -> . VARIAVEL = ENTRADA ( ) ;
+    (10) variavel -> . VARIAVEL = expression
 
-  ! shift/reduce conflict for VARIAVEL resolved as shift
-  ! shift/reduce conflict for ESCREVER resolved as shift
-  ! shift/reduce conflict for ALEATORIO resolved as shift
-  ! shift/reduce conflict for ENTRADA resolved as shift
-  ! shift/reduce conflict for FUNCAO resolved as shift
-    $end            reduce using rule 35 (empty -> .)
-    VARIAVEL        shift and go to state 8
-    ESCREVER        shift and go to state 9
-    ALEATORIO       shift and go to state 10
-    ENTRADA         shift and go to state 11
-    FUNCAO          shift and go to state 13
+    ESCREVER        shift and go to state 4
+    FUNCAO          shift and go to state 6
+    VARIAVEL        shift and go to state 7
 
-  ! VARIAVEL        [ reduce using rule 35 (empty -> .) ]
-  ! ESCREVER        [ reduce using rule 35 (empty -> .) ]
-  ! ALEATORIO       [ reduce using rule 35 (empty -> .) ]
-  ! ENTRADA         [ reduce using rule 35 (empty -> .) ]
-  ! FUNCAO          [ reduce using rule 35 (empty -> .) ]
-
-    program                        shift and go to state 1
-    statement_list                 shift and go to state 2
-    statement                      shift and go to state 3
-    empty                          shift and go to state 4
-    assignment                     shift and go to state 5
-    statement_expr                 shift and go to state 6
-    function_declaration           shift and go to state 7
-    function_call                  shift and go to state 12
+    Rec                            shift and go to state 1
+    Start                          shift and go to state 2
+    ComandosIniciais               shift and go to state 3
+    variavel                       shift and go to state 5
 
 state 1
 
-    (0) S' -> program .
+    (0) S' -> Rec .
+    (2) Rec -> Rec . Start
+    (3) Start -> . ComandosIniciais
+    (4) ComandosIniciais -> . ESCREVER escrever ;
+    (5) ComandosIniciais -> . variavel ;
+    (6) ComandosIniciais -> . FUNCAO funcao FIM
+    (7) ComandosIniciais -> . VARIAVEL = func_call ;
+    (8) ComandosIniciais -> . VARIAVEL = ENTRADA ( ) ;
+    (10) variavel -> . VARIAVEL = expression
 
+    ESCREVER        shift and go to state 4
+    FUNCAO          shift and go to state 6
+    VARIAVEL        shift and go to state 7
 
+    Start                          shift and go to state 8
+    ComandosIniciais               shift and go to state 3
+    variavel                       shift and go to state 5
 
 state 2
 
-    (1) program -> statement_list .
-    (2) statement_list -> statement_list . statement
-    (5) statement -> . assignment SEMI
-    (6) statement -> . statement_expr SEMI
-    (7) statement -> . function_declaration
-    (12) assignment -> . VARIAVEL EQUALS expression
-    (8) statement_expr -> . ESCREVER LPAREN expression RPAREN
-    (9) statement_expr -> . ALEATORIO LPAREN NUM RPAREN
-    (10) statement_expr -> . ENTRADA LPAREN RPAREN
-    (11) statement_expr -> . function_call
-    (29) function_declaration -> . FUNCAO VARIAVEL LPAREN parameter_list RPAREN COLON statement_list FIM
-    (30) function_call -> . VARIAVEL LPAREN argument_list RPAREN
+    (1) Rec -> Start .
 
-    $end            reduce using rule 1 (program -> statement_list .)
-    VARIAVEL        shift and go to state 8
-    ESCREVER        shift and go to state 9
-    ALEATORIO       shift and go to state 10
-    ENTRADA         shift and go to state 11
-    FUNCAO          shift and go to state 13
+    ESCREVER        reduce using rule 1 (Rec -> Start .)
+    FUNCAO          reduce using rule 1 (Rec -> Start .)
+    VARIAVEL        reduce using rule 1 (Rec -> Start .)
+    $end            reduce using rule 1 (Rec -> Start .)
 
-    statement                      shift and go to state 14
-    assignment                     shift and go to state 5
-    statement_expr                 shift and go to state 6
-    function_declaration           shift and go to state 7
-    function_call                  shift and go to state 12
 
 state 3
 
-    (3) statement_list -> statement .
+    (3) Start -> ComandosIniciais .
 
-    VARIAVEL        reduce using rule 3 (statement_list -> statement .)
-    ESCREVER        reduce using rule 3 (statement_list -> statement .)
-    ALEATORIO       reduce using rule 3 (statement_list -> statement .)
-    ENTRADA         reduce using rule 3 (statement_list -> statement .)
-    FUNCAO          reduce using rule 3 (statement_list -> statement .)
-    $end            reduce using rule 3 (statement_list -> statement .)
-    FIM             reduce using rule 3 (statement_list -> statement .)
+    ESCREVER        reduce using rule 3 (Start -> ComandosIniciais .)
+    FUNCAO          reduce using rule 3 (Start -> ComandosIniciais .)
+    VARIAVEL        reduce using rule 3 (Start -> ComandosIniciais .)
+    $end            reduce using rule 3 (Start -> ComandosIniciais .)
 
 
 state 4
 
-    (4) statement_list -> empty .
+    (4) ComandosIniciais -> ESCREVER . escrever ;
+    (9) escrever -> . ( expression )
 
-    VARIAVEL        reduce using rule 4 (statement_list -> empty .)
-    ESCREVER        reduce using rule 4 (statement_list -> empty .)
-    ALEATORIO       reduce using rule 4 (statement_list -> empty .)
-    ENTRADA         reduce using rule 4 (statement_list -> empty .)
-    FUNCAO          reduce using rule 4 (statement_list -> empty .)
-    $end            reduce using rule 4 (statement_list -> empty .)
-    FIM             reduce using rule 4 (statement_list -> empty .)
+    (               shift and go to state 10
 
+    escrever                       shift and go to state 9
 
 state 5
 
-    (5) statement -> assignment . SEMI
+    (5) ComandosIniciais -> variavel . ;
 
-    SEMI            shift and go to state 15
+    ;               shift and go to state 11
 
 
 state 6
 
-    (6) statement -> statement_expr . SEMI
+    (6) ComandosIniciais -> FUNCAO . funcao FIM
+    (24) funcao -> . NAME ( arg )
 
-    SEMI            shift and go to state 16
+    NAME            shift and go to state 13
 
+    funcao                         shift and go to state 12
 
 state 7
 
-    (7) statement -> function_declaration .
+    (7) ComandosIniciais -> VARIAVEL . = func_call ;
+    (8) ComandosIniciais -> VARIAVEL . = ENTRADA ( ) ;
+    (10) variavel -> VARIAVEL . = expression
 
-    VARIAVEL        reduce using rule 7 (statement -> function_declaration .)
-    ESCREVER        reduce using rule 7 (statement -> function_declaration .)
-    ALEATORIO       reduce using rule 7 (statement -> function_declaration .)
-    ENTRADA         reduce using rule 7 (statement -> function_declaration .)
-    FUNCAO          reduce using rule 7 (statement -> function_declaration .)
-    $end            reduce using rule 7 (statement -> function_declaration .)
-    FIM             reduce using rule 7 (statement -> function_declaration .)
+    =               shift and go to state 14
 
 
 state 8
 
-    (12) assignment -> VARIAVEL . EQUALS expression
-    (30) function_call -> VARIAVEL . LPAREN argument_list RPAREN
+    (2) Rec -> Rec Start .
 
-    EQUALS          shift and go to state 17
-    LPAREN          shift and go to state 18
+    ESCREVER        reduce using rule 2 (Rec -> Rec Start .)
+    FUNCAO          reduce using rule 2 (Rec -> Rec Start .)
+    VARIAVEL        reduce using rule 2 (Rec -> Rec Start .)
+    $end            reduce using rule 2 (Rec -> Rec Start .)
 
 
 state 9
 
-    (8) statement_expr -> ESCREVER . LPAREN expression RPAREN
+    (4) ComandosIniciais -> ESCREVER escrever . ;
 
-    LPAREN          shift and go to state 19
+    ;               shift and go to state 15
 
 
 state 10
 
-    (9) statement_expr -> ALEATORIO . LPAREN NUM RPAREN
+    (9) escrever -> ( . expression )
+    (11) expression -> . expression_ops
+    (12) expression -> . STR
+    (13) expression -> . VARIAVEL
+    (14) expression_ops -> . expression_ops + expression_ops
+    (15) expression_ops -> . expression_ops - expression_ops
+    (16) expression_ops -> . expression_ops * expression_ops
+    (17) expression_ops -> . expression_ops / expression_ops
+    (18) expression_ops -> . expression_ops CONCAT expression_ops
+    (19) expression_ops -> . ( expression_ops )
+    (20) expression_ops -> . NUM
+    (21) expression_ops -> . STR
+    (22) expression_ops -> . VARIAVEL
+    (23) expression_ops -> . - expression_ops
 
-    LPAREN          shift and go to state 20
+    STR             shift and go to state 19
+    VARIAVEL        shift and go to state 20
+    (               shift and go to state 16
+    NUM             shift and go to state 22
+    -               shift and go to state 21
 
+    expression                     shift and go to state 17
+    expression_ops                 shift and go to state 18
 
 state 11
 
-    (10) statement_expr -> ENTRADA . LPAREN RPAREN
+    (5) ComandosIniciais -> variavel ; .
 
-    LPAREN          shift and go to state 21
+    ESCREVER        reduce using rule 5 (ComandosIniciais -> variavel ; .)
+    FUNCAO          reduce using rule 5 (ComandosIniciais -> variavel ; .)
+    VARIAVEL        reduce using rule 5 (ComandosIniciais -> variavel ; .)
+    $end            reduce using rule 5 (ComandosIniciais -> variavel ; .)
 
 
 state 12
 
-    (11) statement_expr -> function_call .
+    (6) ComandosIniciais -> FUNCAO funcao . FIM
 
-    SEMI            reduce using rule 11 (statement_expr -> function_call .)
+    FIM             shift and go to state 23
 
 
 state 13
 
-    (29) function_declaration -> FUNCAO . VARIAVEL LPAREN parameter_list RPAREN COLON statement_list FIM
+    (24) funcao -> NAME . ( arg )
 
-    VARIAVEL        shift and go to state 22
+    (               shift and go to state 24
 
 
 state 14
 
-    (2) statement_list -> statement_list statement .
+    (7) ComandosIniciais -> VARIAVEL = . func_call ;
+    (8) ComandosIniciais -> VARIAVEL = . ENTRADA ( ) ;
+    (10) variavel -> VARIAVEL = . expression
+    (25) func_call -> . ALEATORIO ( expression_ops )
+    (26) func_call -> . ESCREVER ( expression_ops )
+    (27) func_call -> . ESCREVER ( STR )
+    (11) expression -> . expression_ops
+    (12) expression -> . STR
+    (13) expression -> . VARIAVEL
+    (14) expression_ops -> . expression_ops + expression_ops
+    (15) expression_ops -> . expression_ops - expression_ops
+    (16) expression_ops -> . expression_ops * expression_ops
+    (17) expression_ops -> . expression_ops / expression_ops
+    (18) expression_ops -> . expression_ops CONCAT expression_ops
+    (19) expression_ops -> . ( expression_ops )
+    (20) expression_ops -> . NUM
+    (21) expression_ops -> . STR
+    (22) expression_ops -> . VARIAVEL
+    (23) expression_ops -> . - expression_ops
 
-    VARIAVEL        reduce using rule 2 (statement_list -> statement_list statement .)
-    ESCREVER        reduce using rule 2 (statement_list -> statement_list statement .)
-    ALEATORIO       reduce using rule 2 (statement_list -> statement_list statement .)
-    ENTRADA         reduce using rule 2 (statement_list -> statement_list statement .)
-    FUNCAO          reduce using rule 2 (statement_list -> statement_list statement .)
-    $end            reduce using rule 2 (statement_list -> statement_list statement .)
-    FIM             reduce using rule 2 (statement_list -> statement_list statement .)
+    ENTRADA         shift and go to state 26
+    ALEATORIO       shift and go to state 28
+    ESCREVER        shift and go to state 29
+    STR             shift and go to state 19
+    VARIAVEL        shift and go to state 20
+    (               shift and go to state 16
+    NUM             shift and go to state 22
+    -               shift and go to state 21
 
+    func_call                      shift and go to state 25
+    expression                     shift and go to state 27
+    expression_ops                 shift and go to state 18
 
 state 15
 
-    (5) statement -> assignment SEMI .
+    (4) ComandosIniciais -> ESCREVER escrever ; .
 
-    VARIAVEL        reduce using rule 5 (statement -> assignment SEMI .)
-    ESCREVER        reduce using rule 5 (statement -> assignment SEMI .)
-    ALEATORIO       reduce using rule 5 (statement -> assignment SEMI .)
-    ENTRADA         reduce using rule 5 (statement -> assignment SEMI .)
-    FUNCAO          reduce using rule 5 (statement -> assignment SEMI .)
-    $end            reduce using rule 5 (statement -> assignment SEMI .)
-    FIM             reduce using rule 5 (statement -> assignment SEMI .)
+    ESCREVER        reduce using rule 4 (ComandosIniciais -> ESCREVER escrever ; .)
+    FUNCAO          reduce using rule 4 (ComandosIniciais -> ESCREVER escrever ; .)
+    VARIAVEL        reduce using rule 4 (ComandosIniciais -> ESCREVER escrever ; .)
+    $end            reduce using rule 4 (ComandosIniciais -> ESCREVER escrever ; .)
 
 
 state 16
 
-    (6) statement -> statement_expr SEMI .
+    (19) expression_ops -> ( . expression_ops )
+    (14) expression_ops -> . expression_ops + expression_ops
+    (15) expression_ops -> . expression_ops - expression_ops
+    (16) expression_ops -> . expression_ops * expression_ops
+    (17) expression_ops -> . expression_ops / expression_ops
+    (18) expression_ops -> . expression_ops CONCAT expression_ops
+    (19) expression_ops -> . ( expression_ops )
+    (20) expression_ops -> . NUM
+    (21) expression_ops -> . STR
+    (22) expression_ops -> . VARIAVEL
+    (23) expression_ops -> . - expression_ops
 
-    VARIAVEL        reduce using rule 6 (statement -> statement_expr SEMI .)
-    ESCREVER        reduce using rule 6 (statement -> statement_expr SEMI .)
-    ALEATORIO       reduce using rule 6 (statement -> statement_expr SEMI .)
-    ENTRADA         reduce using rule 6 (statement -> statement_expr SEMI .)
-    FUNCAO          reduce using rule 6 (statement -> statement_expr SEMI .)
-    $end            reduce using rule 6 (statement -> statement_expr SEMI .)
-    FIM             reduce using rule 6 (statement -> statement_expr SEMI .)
+    (               shift and go to state 16
+    NUM             shift and go to state 22
+    STR             shift and go to state 31
+    VARIAVEL        shift and go to state 32
+    -               shift and go to state 21
 
+    expression_ops                 shift and go to state 30
 
 state 17
 
-    (12) assignment -> VARIAVEL EQUALS . expression
-    (13) expression -> . expr
-    (14) expr -> . expr PLUS term
-    (15) expr -> . expr MINUS term
-    (16) expr -> . expr CONCAT term
-    (17) expr -> . term
-    (18) term -> . term TIMES factor
-    (19) term -> . term DIVIDE factor
-    (20) term -> . factor
-    (21) factor -> . NUM
-    (22) factor -> . LPAREN expression RPAREN
-    (23) factor -> . STR
-    (24) factor -> . VARIAVEL
-    (25) factor -> . list
-    (26) list -> . LBRACKET elements RBRACKET
+    (9) escrever -> ( expression . )
 
-    NUM             shift and go to state 28
-    LPAREN          shift and go to state 29
-    STR             shift and go to state 30
-    VARIAVEL        shift and go to state 23
-    LBRACKET        shift and go to state 32
+    )               shift and go to state 33
 
-    expression                     shift and go to state 24
-    expr                           shift and go to state 25
-    term                           shift and go to state 26
-    factor                         shift and go to state 27
-    list                           shift and go to state 31
 
 state 18
 
-    (30) function_call -> VARIAVEL LPAREN . argument_list RPAREN
-    (31) argument_list -> . expression
-    (32) argument_list -> . argument_list COMMA expression
-    (13) expression -> . expr
-    (14) expr -> . expr PLUS term
-    (15) expr -> . expr MINUS term
-    (16) expr -> . expr CONCAT term
-    (17) expr -> . term
-    (18) term -> . term TIMES factor
-    (19) term -> . term DIVIDE factor
-    (20) term -> . factor
-    (21) factor -> . NUM
-    (22) factor -> . LPAREN expression RPAREN
-    (23) factor -> . STR
-    (24) factor -> . VARIAVEL
-    (25) factor -> . list
-    (26) list -> . LBRACKET elements RBRACKET
+    (11) expression -> expression_ops .
+    (14) expression_ops -> expression_ops . + expression_ops
+    (15) expression_ops -> expression_ops . - expression_ops
+    (16) expression_ops -> expression_ops . * expression_ops
+    (17) expression_ops -> expression_ops . / expression_ops
+    (18) expression_ops -> expression_ops . CONCAT expression_ops
 
-    NUM             shift and go to state 28
-    LPAREN          shift and go to state 29
-    STR             shift and go to state 30
-    VARIAVEL        shift and go to state 23
-    LBRACKET        shift and go to state 32
+    )               reduce using rule 11 (expression -> expression_ops .)
+    ;               reduce using rule 11 (expression -> expression_ops .)
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    CONCAT          shift and go to state 38
 
-    argument_list                  shift and go to state 33
-    expression                     shift and go to state 34
-    expr                           shift and go to state 25
-    term                           shift and go to state 26
-    factor                         shift and go to state 27
-    list                           shift and go to state 31
 
 state 19
 
-    (8) statement_expr -> ESCREVER LPAREN . expression RPAREN
-    (13) expression -> . expr
-    (14) expr -> . expr PLUS term
-    (15) expr -> . expr MINUS term
-    (16) expr -> . expr CONCAT term
-    (17) expr -> . term
-    (18) term -> . term TIMES factor
-    (19) term -> . term DIVIDE factor
-    (20) term -> . factor
-    (21) factor -> . NUM
-    (22) factor -> . LPAREN expression RPAREN
-    (23) factor -> . STR
-    (24) factor -> . VARIAVEL
-    (25) factor -> . list
-    (26) list -> . LBRACKET elements RBRACKET
+    (12) expression -> STR .
+    (21) expression_ops -> STR .
 
-    NUM             shift and go to state 28
-    LPAREN          shift and go to state 29
-    STR             shift and go to state 30
-    VARIAVEL        shift and go to state 23
-    LBRACKET        shift and go to state 32
+  ! reduce/reduce conflict for ) resolved using rule 12 (expression -> STR .)
+  ! reduce/reduce conflict for ; resolved using rule 12 (expression -> STR .)
+    )               reduce using rule 12 (expression -> STR .)
+    ;               reduce using rule 12 (expression -> STR .)
+    +               reduce using rule 21 (expression_ops -> STR .)
+    -               reduce using rule 21 (expression_ops -> STR .)
+    *               reduce using rule 21 (expression_ops -> STR .)
+    /               reduce using rule 21 (expression_ops -> STR .)
+    CONCAT          reduce using rule 21 (expression_ops -> STR .)
 
-    expression                     shift and go to state 35
-    expr                           shift and go to state 25
-    term                           shift and go to state 26
-    factor                         shift and go to state 27
-    list                           shift and go to state 31
+  ! )               [ reduce using rule 21 (expression_ops -> STR .) ]
+  ! ;               [ reduce using rule 21 (expression_ops -> STR .) ]
+
 
 state 20
 
-    (9) statement_expr -> ALEATORIO LPAREN . NUM RPAREN
+    (13) expression -> VARIAVEL .
+    (22) expression_ops -> VARIAVEL .
 
-    NUM             shift and go to state 36
+  ! reduce/reduce conflict for ) resolved using rule 13 (expression -> VARIAVEL .)
+  ! reduce/reduce conflict for ; resolved using rule 13 (expression -> VARIAVEL .)
+    )               reduce using rule 13 (expression -> VARIAVEL .)
+    ;               reduce using rule 13 (expression -> VARIAVEL .)
+    +               reduce using rule 22 (expression_ops -> VARIAVEL .)
+    -               reduce using rule 22 (expression_ops -> VARIAVEL .)
+    *               reduce using rule 22 (expression_ops -> VARIAVEL .)
+    /               reduce using rule 22 (expression_ops -> VARIAVEL .)
+    CONCAT          reduce using rule 22 (expression_ops -> VARIAVEL .)
+
+  ! )               [ reduce using rule 22 (expression_ops -> VARIAVEL .) ]
+  ! ;               [ reduce using rule 22 (expression_ops -> VARIAVEL .) ]
 
 
 state 21
 
-    (10) statement_expr -> ENTRADA LPAREN . RPAREN
+    (23) expression_ops -> - . expression_ops
+    (14) expression_ops -> . expression_ops + expression_ops
+    (15) expression_ops -> . expression_ops - expression_ops
+    (16) expression_ops -> . expression_ops * expression_ops
+    (17) expression_ops -> . expression_ops / expression_ops
+    (18) expression_ops -> . expression_ops CONCAT expression_ops
+    (19) expression_ops -> . ( expression_ops )
+    (20) expression_ops -> . NUM
+    (21) expression_ops -> . STR
+    (22) expression_ops -> . VARIAVEL
+    (23) expression_ops -> . - expression_ops
 
-    RPAREN          shift and go to state 37
+    (               shift and go to state 16
+    NUM             shift and go to state 22
+    STR             shift and go to state 31
+    VARIAVEL        shift and go to state 32
+    -               shift and go to state 21
 
+    expression_ops                 shift and go to state 39
 
 state 22
 
-    (29) function_declaration -> FUNCAO VARIAVEL . LPAREN parameter_list RPAREN COLON statement_list FIM
+    (20) expression_ops -> NUM .
 
-    LPAREN          shift and go to state 38
+    +               reduce using rule 20 (expression_ops -> NUM .)
+    -               reduce using rule 20 (expression_ops -> NUM .)
+    *               reduce using rule 20 (expression_ops -> NUM .)
+    /               reduce using rule 20 (expression_ops -> NUM .)
+    CONCAT          reduce using rule 20 (expression_ops -> NUM .)
+    )               reduce using rule 20 (expression_ops -> NUM .)
+    ;               reduce using rule 20 (expression_ops -> NUM .)
 
 
 state 23
 
-    (24) factor -> VARIAVEL .
+    (6) ComandosIniciais -> FUNCAO funcao FIM .
 
-    TIMES           reduce using rule 24 (factor -> VARIAVEL .)
-    DIVIDE          reduce using rule 24 (factor -> VARIAVEL .)
-    PLUS            reduce using rule 24 (factor -> VARIAVEL .)
-    MINUS           reduce using rule 24 (factor -> VARIAVEL .)
-    CONCAT          reduce using rule 24 (factor -> VARIAVEL .)
-    SEMI            reduce using rule 24 (factor -> VARIAVEL .)
-    RPAREN          reduce using rule 24 (factor -> VARIAVEL .)
-    COMMA           reduce using rule 24 (factor -> VARIAVEL .)
-    RBRACKET        reduce using rule 24 (factor -> VARIAVEL .)
+    ESCREVER        reduce using rule 6 (ComandosIniciais -> FUNCAO funcao FIM .)
+    FUNCAO          reduce using rule 6 (ComandosIniciais -> FUNCAO funcao FIM .)
+    VARIAVEL        reduce using rule 6 (ComandosIniciais -> FUNCAO funcao FIM .)
+    $end            reduce using rule 6 (ComandosIniciais -> FUNCAO funcao FIM .)
 
 
 state 24
 
-    (12) assignment -> VARIAVEL EQUALS expression .
+    (24) funcao -> NAME ( . arg )
+    (28) arg -> . NAME
+    (29) arg -> . NAME , arg
 
-    SEMI            reduce using rule 12 (assignment -> VARIAVEL EQUALS expression .)
+    NAME            shift and go to state 40
 
+    arg                            shift and go to state 41
 
 state 25
 
-    (13) expression -> expr .
-    (14) expr -> expr . PLUS term
-    (15) expr -> expr . MINUS term
-    (16) expr -> expr . CONCAT term
+    (7) ComandosIniciais -> VARIAVEL = func_call . ;
 
-    SEMI            reduce using rule 13 (expression -> expr .)
-    RPAREN          reduce using rule 13 (expression -> expr .)
-    COMMA           reduce using rule 13 (expression -> expr .)
-    RBRACKET        reduce using rule 13 (expression -> expr .)
-    PLUS            shift and go to state 39
-    MINUS           shift and go to state 40
-    CONCAT          shift and go to state 41
+    ;               shift and go to state 42
 
 
 state 26
 
-    (17) expr -> term .
-    (18) term -> term . TIMES factor
-    (19) term -> term . DIVIDE factor
+    (8) ComandosIniciais -> VARIAVEL = ENTRADA . ( ) ;
 
-    PLUS            reduce using rule 17 (expr -> term .)
-    MINUS           reduce using rule 17 (expr -> term .)
-    CONCAT          reduce using rule 17 (expr -> term .)
-    SEMI            reduce using rule 17 (expr -> term .)
-    RPAREN          reduce using rule 17 (expr -> term .)
-    COMMA           reduce using rule 17 (expr -> term .)
-    RBRACKET        reduce using rule 17 (expr -> term .)
-    TIMES           shift and go to state 42
-    DIVIDE          shift and go to state 43
+    (               shift and go to state 43
 
 
 state 27
 
-    (20) term -> factor .
+    (10) variavel -> VARIAVEL = expression .
 
-    TIMES           reduce using rule 20 (term -> factor .)
-    DIVIDE          reduce using rule 20 (term -> factor .)
-    PLUS            reduce using rule 20 (term -> factor .)
-    MINUS           reduce using rule 20 (term -> factor .)
-    CONCAT          reduce using rule 20 (term -> factor .)
-    SEMI            reduce using rule 20 (term -> factor .)
-    RPAREN          reduce using rule 20 (term -> factor .)
-    COMMA           reduce using rule 20 (term -> factor .)
-    RBRACKET        reduce using rule 20 (term -> factor .)
+    ;               reduce using rule 10 (variavel -> VARIAVEL = expression .)
 
 
 state 28
 
-    (21) factor -> NUM .
+    (25) func_call -> ALEATORIO . ( expression_ops )
 
-    TIMES           reduce using rule 21 (factor -> NUM .)
-    DIVIDE          reduce using rule 21 (factor -> NUM .)
-    PLUS            reduce using rule 21 (factor -> NUM .)
-    MINUS           reduce using rule 21 (factor -> NUM .)
-    CONCAT          reduce using rule 21 (factor -> NUM .)
-    SEMI            reduce using rule 21 (factor -> NUM .)
-    RPAREN          reduce using rule 21 (factor -> NUM .)
-    COMMA           reduce using rule 21 (factor -> NUM .)
-    RBRACKET        reduce using rule 21 (factor -> NUM .)
+    (               shift and go to state 44
 
 
 state 29
 
-    (22) factor -> LPAREN . expression RPAREN
-    (13) expression -> . expr
-    (14) expr -> . expr PLUS term
-    (15) expr -> . expr MINUS term
-    (16) expr -> . expr CONCAT term
-    (17) expr -> . term
-    (18) term -> . term TIMES factor
-    (19) term -> . term DIVIDE factor
-    (20) term -> . factor
-    (21) factor -> . NUM
-    (22) factor -> . LPAREN expression RPAREN
-    (23) factor -> . STR
-    (24) factor -> . VARIAVEL
-    (25) factor -> . list
-    (26) list -> . LBRACKET elements RBRACKET
+    (26) func_call -> ESCREVER . ( expression_ops )
+    (27) func_call -> ESCREVER . ( STR )
 
-    NUM             shift and go to state 28
-    LPAREN          shift and go to state 29
-    STR             shift and go to state 30
-    VARIAVEL        shift and go to state 23
-    LBRACKET        shift and go to state 32
+    (               shift and go to state 45
 
-    expression                     shift and go to state 44
-    expr                           shift and go to state 25
-    term                           shift and go to state 26
-    factor                         shift and go to state 27
-    list                           shift and go to state 31
 
 state 30
 
-    (23) factor -> STR .
+    (19) expression_ops -> ( expression_ops . )
+    (14) expression_ops -> expression_ops . + expression_ops
+    (15) expression_ops -> expression_ops . - expression_ops
+    (16) expression_ops -> expression_ops . * expression_ops
+    (17) expression_ops -> expression_ops . / expression_ops
+    (18) expression_ops -> expression_ops . CONCAT expression_ops
 
-    TIMES           reduce using rule 23 (factor -> STR .)
-    DIVIDE          reduce using rule 23 (factor -> STR .)
-    PLUS            reduce using rule 23 (factor -> STR .)
-    MINUS           reduce using rule 23 (factor -> STR .)
-    CONCAT          reduce using rule 23 (factor -> STR .)
-    SEMI            reduce using rule 23 (factor -> STR .)
-    RPAREN          reduce using rule 23 (factor -> STR .)
-    COMMA           reduce using rule 23 (factor -> STR .)
-    RBRACKET        reduce using rule 23 (factor -> STR .)
+    )               shift and go to state 46
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    CONCAT          shift and go to state 38
 
 
 state 31
 
-    (25) factor -> list .
+    (21) expression_ops -> STR .
 
-    TIMES           reduce using rule 25 (factor -> list .)
-    DIVIDE          reduce using rule 25 (factor -> list .)
-    PLUS            reduce using rule 25 (factor -> list .)
-    MINUS           reduce using rule 25 (factor -> list .)
-    CONCAT          reduce using rule 25 (factor -> list .)
-    SEMI            reduce using rule 25 (factor -> list .)
-    RPAREN          reduce using rule 25 (factor -> list .)
-    COMMA           reduce using rule 25 (factor -> list .)
-    RBRACKET        reduce using rule 25 (factor -> list .)
+    )               reduce using rule 21 (expression_ops -> STR .)
+    +               reduce using rule 21 (expression_ops -> STR .)
+    -               reduce using rule 21 (expression_ops -> STR .)
+    *               reduce using rule 21 (expression_ops -> STR .)
+    /               reduce using rule 21 (expression_ops -> STR .)
+    CONCAT          reduce using rule 21 (expression_ops -> STR .)
+    ;               reduce using rule 21 (expression_ops -> STR .)
 
 
 state 32
 
-    (26) list -> LBRACKET . elements RBRACKET
-    (27) elements -> . expression
-    (28) elements -> . elements COMMA expression
-    (13) expression -> . expr
-    (14) expr -> . expr PLUS term
-    (15) expr -> . expr MINUS term
-    (16) expr -> . expr CONCAT term
-    (17) expr -> . term
-    (18) term -> . term TIMES factor
-    (19) term -> . term DIVIDE factor
-    (20) term -> . factor
-    (21) factor -> . NUM
-    (22) factor -> . LPAREN expression RPAREN
-    (23) factor -> . STR
-    (24) factor -> . VARIAVEL
-    (25) factor -> . list
-    (26) list -> . LBRACKET elements RBRACKET
+    (22) expression_ops -> VARIAVEL .
 
-    NUM             shift and go to state 28
-    LPAREN          shift and go to state 29
-    STR             shift and go to state 30
-    VARIAVEL        shift and go to state 23
-    LBRACKET        shift and go to state 32
+    )               reduce using rule 22 (expression_ops -> VARIAVEL .)
+    +               reduce using rule 22 (expression_ops -> VARIAVEL .)
+    -               reduce using rule 22 (expression_ops -> VARIAVEL .)
+    *               reduce using rule 22 (expression_ops -> VARIAVEL .)
+    /               reduce using rule 22 (expression_ops -> VARIAVEL .)
+    CONCAT          reduce using rule 22 (expression_ops -> VARIAVEL .)
+    ;               reduce using rule 22 (expression_ops -> VARIAVEL .)
 
-    elements                       shift and go to state 45
-    expression                     shift and go to state 46
-    expr                           shift and go to state 25
-    term                           shift and go to state 26
-    factor                         shift and go to state 27
-    list                           shift and go to state 31
 
 state 33
 
-    (30) function_call -> VARIAVEL LPAREN argument_list . RPAREN
-    (32) argument_list -> argument_list . COMMA expression
+    (9) escrever -> ( expression ) .
 
-    RPAREN          shift and go to state 47
-    COMMA           shift and go to state 48
+    ;               reduce using rule 9 (escrever -> ( expression ) .)
 
 
 state 34
 
-    (31) argument_list -> expression .
+    (14) expression_ops -> expression_ops + . expression_ops
+    (14) expression_ops -> . expression_ops + expression_ops
+    (15) expression_ops -> . expression_ops - expression_ops
+    (16) expression_ops -> . expression_ops * expression_ops
+    (17) expression_ops -> . expression_ops / expression_ops
+    (18) expression_ops -> . expression_ops CONCAT expression_ops
+    (19) expression_ops -> . ( expression_ops )
+    (20) expression_ops -> . NUM
+    (21) expression_ops -> . STR
+    (22) expression_ops -> . VARIAVEL
+    (23) expression_ops -> . - expression_ops
 
-    RPAREN          reduce using rule 31 (argument_list -> expression .)
-    COMMA           reduce using rule 31 (argument_list -> expression .)
+    (               shift and go to state 16
+    NUM             shift and go to state 22
+    STR             shift and go to state 31
+    VARIAVEL        shift and go to state 32
+    -               shift and go to state 21
 
+    expression_ops                 shift and go to state 47
 
 state 35
 
-    (8) statement_expr -> ESCREVER LPAREN expression . RPAREN
+    (15) expression_ops -> expression_ops - . expression_ops
+    (14) expression_ops -> . expression_ops + expression_ops
+    (15) expression_ops -> . expression_ops - expression_ops
+    (16) expression_ops -> . expression_ops * expression_ops
+    (17) expression_ops -> . expression_ops / expression_ops
+    (18) expression_ops -> . expression_ops CONCAT expression_ops
+    (19) expression_ops -> . ( expression_ops )
+    (20) expression_ops -> . NUM
+    (21) expression_ops -> . STR
+    (22) expression_ops -> . VARIAVEL
+    (23) expression_ops -> . - expression_ops
 
-    RPAREN          shift and go to state 49
+    (               shift and go to state 16
+    NUM             shift and go to state 22
+    STR             shift and go to state 31
+    VARIAVEL        shift and go to state 32
+    -               shift and go to state 21
 
+    expression_ops                 shift and go to state 48
 
 state 36
 
-    (9) statement_expr -> ALEATORIO LPAREN NUM . RPAREN
+    (16) expression_ops -> expression_ops * . expression_ops
+    (14) expression_ops -> . expression_ops + expression_ops
+    (15) expression_ops -> . expression_ops - expression_ops
+    (16) expression_ops -> . expression_ops * expression_ops
+    (17) expression_ops -> . expression_ops / expression_ops
+    (18) expression_ops -> . expression_ops CONCAT expression_ops
+    (19) expression_ops -> . ( expression_ops )
+    (20) expression_ops -> . NUM
+    (21) expression_ops -> . STR
+    (22) expression_ops -> . VARIAVEL
+    (23) expression_ops -> . - expression_ops
 
-    RPAREN          shift and go to state 50
+    (               shift and go to state 16
+    NUM             shift and go to state 22
+    STR             shift and go to state 31
+    VARIAVEL        shift and go to state 32
+    -               shift and go to state 21
 
+    expression_ops                 shift and go to state 49
 
 state 37
 
-    (10) statement_expr -> ENTRADA LPAREN RPAREN .
+    (17) expression_ops -> expression_ops / . expression_ops
+    (14) expression_ops -> . expression_ops + expression_ops
+    (15) expression_ops -> . expression_ops - expression_ops
+    (16) expression_ops -> . expression_ops * expression_ops
+    (17) expression_ops -> . expression_ops / expression_ops
+    (18) expression_ops -> . expression_ops CONCAT expression_ops
+    (19) expression_ops -> . ( expression_ops )
+    (20) expression_ops -> . NUM
+    (21) expression_ops -> . STR
+    (22) expression_ops -> . VARIAVEL
+    (23) expression_ops -> . - expression_ops
 
-    SEMI            reduce using rule 10 (statement_expr -> ENTRADA LPAREN RPAREN .)
+    (               shift and go to state 16
+    NUM             shift and go to state 22
+    STR             shift and go to state 31
+    VARIAVEL        shift and go to state 32
+    -               shift and go to state 21
 
+    expression_ops                 shift and go to state 50
 
 state 38
 
-    (29) function_declaration -> FUNCAO VARIAVEL LPAREN . parameter_list RPAREN COLON statement_list FIM
-    (33) parameter_list -> . VARIAVEL
-    (34) parameter_list -> . parameter_list COMMA VARIAVEL
+    (18) expression_ops -> expression_ops CONCAT . expression_ops
+    (14) expression_ops -> . expression_ops + expression_ops
+    (15) expression_ops -> . expression_ops - expression_ops
+    (16) expression_ops -> . expression_ops * expression_ops
+    (17) expression_ops -> . expression_ops / expression_ops
+    (18) expression_ops -> . expression_ops CONCAT expression_ops
+    (19) expression_ops -> . ( expression_ops )
+    (20) expression_ops -> . NUM
+    (21) expression_ops -> . STR
+    (22) expression_ops -> . VARIAVEL
+    (23) expression_ops -> . - expression_ops
 
-    VARIAVEL        shift and go to state 51
+    (               shift and go to state 16
+    NUM             shift and go to state 22
+    STR             shift and go to state 31
+    VARIAVEL        shift and go to state 32
+    -               shift and go to state 21
 
-    parameter_list                 shift and go to state 52
+    expression_ops                 shift and go to state 51
 
 state 39
 
-    (14) expr -> expr PLUS . term
-    (18) term -> . term TIMES factor
-    (19) term -> . term DIVIDE factor
-    (20) term -> . factor
-    (21) factor -> . NUM
-    (22) factor -> . LPAREN expression RPAREN
-    (23) factor -> . STR
-    (24) factor -> . VARIAVEL
-    (25) factor -> . list
-    (26) list -> . LBRACKET elements RBRACKET
+    (23) expression_ops -> - expression_ops .
+    (14) expression_ops -> expression_ops . + expression_ops
+    (15) expression_ops -> expression_ops . - expression_ops
+    (16) expression_ops -> expression_ops . * expression_ops
+    (17) expression_ops -> expression_ops . / expression_ops
+    (18) expression_ops -> expression_ops . CONCAT expression_ops
 
-    NUM             shift and go to state 28
-    LPAREN          shift and go to state 29
-    STR             shift and go to state 30
-    VARIAVEL        shift and go to state 23
-    LBRACKET        shift and go to state 32
+    +               reduce using rule 23 (expression_ops -> - expression_ops .)
+    -               reduce using rule 23 (expression_ops -> - expression_ops .)
+    *               reduce using rule 23 (expression_ops -> - expression_ops .)
+    /               reduce using rule 23 (expression_ops -> - expression_ops .)
+    CONCAT          reduce using rule 23 (expression_ops -> - expression_ops .)
+    )               reduce using rule 23 (expression_ops -> - expression_ops .)
+    ;               reduce using rule 23 (expression_ops -> - expression_ops .)
 
-    term                           shift and go to state 53
-    factor                         shift and go to state 27
-    list                           shift and go to state 31
+  ! +               [ shift and go to state 34 ]
+  ! -               [ shift and go to state 35 ]
+  ! *               [ shift and go to state 36 ]
+  ! /               [ shift and go to state 37 ]
+  ! CONCAT          [ shift and go to state 38 ]
+
 
 state 40
 
-    (15) expr -> expr MINUS . term
-    (18) term -> . term TIMES factor
-    (19) term -> . term DIVIDE factor
-    (20) term -> . factor
-    (21) factor -> . NUM
-    (22) factor -> . LPAREN expression RPAREN
-    (23) factor -> . STR
-    (24) factor -> . VARIAVEL
-    (25) factor -> . list
-    (26) list -> . LBRACKET elements RBRACKET
+    (28) arg -> NAME .
+    (29) arg -> NAME . , arg
 
-    NUM             shift and go to state 28
-    LPAREN          shift and go to state 29
-    STR             shift and go to state 30
-    VARIAVEL        shift and go to state 23
-    LBRACKET        shift and go to state 32
+    )               reduce using rule 28 (arg -> NAME .)
+    ,               shift and go to state 52
 
-    term                           shift and go to state 54
-    factor                         shift and go to state 27
-    list                           shift and go to state 31
 
 state 41
 
-    (16) expr -> expr CONCAT . term
-    (18) term -> . term TIMES factor
-    (19) term -> . term DIVIDE factor
-    (20) term -> . factor
-    (21) factor -> . NUM
-    (22) factor -> . LPAREN expression RPAREN
-    (23) factor -> . STR
-    (24) factor -> . VARIAVEL
-    (25) factor -> . list
-    (26) list -> . LBRACKET elements RBRACKET
+    (24) funcao -> NAME ( arg . )
 
-    NUM             shift and go to state 28
-    LPAREN          shift and go to state 29
-    STR             shift and go to state 30
-    VARIAVEL        shift and go to state 23
-    LBRACKET        shift and go to state 32
+    )               shift and go to state 53
 
-    term                           shift and go to state 55
-    factor                         shift and go to state 27
-    list                           shift and go to state 31
 
 state 42
 
-    (18) term -> term TIMES . factor
-    (21) factor -> . NUM
-    (22) factor -> . LPAREN expression RPAREN
-    (23) factor -> . STR
-    (24) factor -> . VARIAVEL
-    (25) factor -> . list
-    (26) list -> . LBRACKET elements RBRACKET
+    (7) ComandosIniciais -> VARIAVEL = func_call ; .
 
-    NUM             shift and go to state 28
-    LPAREN          shift and go to state 29
-    STR             shift and go to state 30
-    VARIAVEL        shift and go to state 23
-    LBRACKET        shift and go to state 32
+    ESCREVER        reduce using rule 7 (ComandosIniciais -> VARIAVEL = func_call ; .)
+    FUNCAO          reduce using rule 7 (ComandosIniciais -> VARIAVEL = func_call ; .)
+    VARIAVEL        reduce using rule 7 (ComandosIniciais -> VARIAVEL = func_call ; .)
+    $end            reduce using rule 7 (ComandosIniciais -> VARIAVEL = func_call ; .)
 
-    factor                         shift and go to state 56
-    list                           shift and go to state 31
 
 state 43
 
-    (19) term -> term DIVIDE . factor
-    (21) factor -> . NUM
-    (22) factor -> . LPAREN expression RPAREN
-    (23) factor -> . STR
-    (24) factor -> . VARIAVEL
-    (25) factor -> . list
-    (26) list -> . LBRACKET elements RBRACKET
+    (8) ComandosIniciais -> VARIAVEL = ENTRADA ( . ) ;
 
-    NUM             shift and go to state 28
-    LPAREN          shift and go to state 29
-    STR             shift and go to state 30
-    VARIAVEL        shift and go to state 23
-    LBRACKET        shift and go to state 32
+    )               shift and go to state 54
 
-    factor                         shift and go to state 57
-    list                           shift and go to state 31
 
 state 44
 
-    (22) factor -> LPAREN expression . RPAREN
+    (25) func_call -> ALEATORIO ( . expression_ops )
+    (14) expression_ops -> . expression_ops + expression_ops
+    (15) expression_ops -> . expression_ops - expression_ops
+    (16) expression_ops -> . expression_ops * expression_ops
+    (17) expression_ops -> . expression_ops / expression_ops
+    (18) expression_ops -> . expression_ops CONCAT expression_ops
+    (19) expression_ops -> . ( expression_ops )
+    (20) expression_ops -> . NUM
+    (21) expression_ops -> . STR
+    (22) expression_ops -> . VARIAVEL
+    (23) expression_ops -> . - expression_ops
 
-    RPAREN          shift and go to state 58
+    (               shift and go to state 16
+    NUM             shift and go to state 22
+    STR             shift and go to state 31
+    VARIAVEL        shift and go to state 32
+    -               shift and go to state 21
 
+    expression_ops                 shift and go to state 55
 
 state 45
 
-    (26) list -> LBRACKET elements . RBRACKET
-    (28) elements -> elements . COMMA expression
+    (26) func_call -> ESCREVER ( . expression_ops )
+    (27) func_call -> ESCREVER ( . STR )
+    (14) expression_ops -> . expression_ops + expression_ops
+    (15) expression_ops -> . expression_ops - expression_ops
+    (16) expression_ops -> . expression_ops * expression_ops
+    (17) expression_ops -> . expression_ops / expression_ops
+    (18) expression_ops -> . expression_ops CONCAT expression_ops
+    (19) expression_ops -> . ( expression_ops )
+    (20) expression_ops -> . NUM
+    (21) expression_ops -> . STR
+    (22) expression_ops -> . VARIAVEL
+    (23) expression_ops -> . - expression_ops
 
-    RBRACKET        shift and go to state 59
-    COMMA           shift and go to state 60
+    STR             shift and go to state 57
+    (               shift and go to state 16
+    NUM             shift and go to state 22
+    VARIAVEL        shift and go to state 32
+    -               shift and go to state 21
 
+    expression_ops                 shift and go to state 56
 
 state 46
 
-    (27) elements -> expression .
+    (19) expression_ops -> ( expression_ops ) .
 
-    RBRACKET        reduce using rule 27 (elements -> expression .)
-    COMMA           reduce using rule 27 (elements -> expression .)
+    +               reduce using rule 19 (expression_ops -> ( expression_ops ) .)
+    -               reduce using rule 19 (expression_ops -> ( expression_ops ) .)
+    *               reduce using rule 19 (expression_ops -> ( expression_ops ) .)
+    /               reduce using rule 19 (expression_ops -> ( expression_ops ) .)
+    CONCAT          reduce using rule 19 (expression_ops -> ( expression_ops ) .)
+    )               reduce using rule 19 (expression_ops -> ( expression_ops ) .)
+    ;               reduce using rule 19 (expression_ops -> ( expression_ops ) .)
 
 
 state 47
 
-    (30) function_call -> VARIAVEL LPAREN argument_list RPAREN .
+    (14) expression_ops -> expression_ops + expression_ops .
+    (14) expression_ops -> expression_ops . + expression_ops
+    (15) expression_ops -> expression_ops . - expression_ops
+    (16) expression_ops -> expression_ops . * expression_ops
+    (17) expression_ops -> expression_ops . / expression_ops
+    (18) expression_ops -> expression_ops . CONCAT expression_ops
 
-    SEMI            reduce using rule 30 (function_call -> VARIAVEL LPAREN argument_list RPAREN .)
+    +               reduce using rule 14 (expression_ops -> expression_ops + expression_ops .)
+    -               reduce using rule 14 (expression_ops -> expression_ops + expression_ops .)
+    CONCAT          reduce using rule 14 (expression_ops -> expression_ops + expression_ops .)
+    )               reduce using rule 14 (expression_ops -> expression_ops + expression_ops .)
+    ;               reduce using rule 14 (expression_ops -> expression_ops + expression_ops .)
+    *               shift and go to state 36
+    /               shift and go to state 37
+
+  ! *               [ reduce using rule 14 (expression_ops -> expression_ops + expression_ops .) ]
+  ! /               [ reduce using rule 14 (expression_ops -> expression_ops + expression_ops .) ]
+  ! +               [ shift and go to state 34 ]
+  ! -               [ shift and go to state 35 ]
+  ! CONCAT          [ shift and go to state 38 ]
 
 
 state 48
 
-    (32) argument_list -> argument_list COMMA . expression
-    (13) expression -> . expr
-    (14) expr -> . expr PLUS term
-    (15) expr -> . expr MINUS term
-    (16) expr -> . expr CONCAT term
-    (17) expr -> . term
-    (18) term -> . term TIMES factor
-    (19) term -> . term DIVIDE factor
-    (20) term -> . factor
-    (21) factor -> . NUM
-    (22) factor -> . LPAREN expression RPAREN
-    (23) factor -> . STR
-    (24) factor -> . VARIAVEL
-    (25) factor -> . list
-    (26) list -> . LBRACKET elements RBRACKET
+    (15) expression_ops -> expression_ops - expression_ops .
+    (14) expression_ops -> expression_ops . + expression_ops
+    (15) expression_ops -> expression_ops . - expression_ops
+    (16) expression_ops -> expression_ops . * expression_ops
+    (17) expression_ops -> expression_ops . / expression_ops
+    (18) expression_ops -> expression_ops . CONCAT expression_ops
 
-    NUM             shift and go to state 28
-    LPAREN          shift and go to state 29
-    STR             shift and go to state 30
-    VARIAVEL        shift and go to state 23
-    LBRACKET        shift and go to state 32
+    +               reduce using rule 15 (expression_ops -> expression_ops - expression_ops .)
+    -               reduce using rule 15 (expression_ops -> expression_ops - expression_ops .)
+    CONCAT          reduce using rule 15 (expression_ops -> expression_ops - expression_ops .)
+    )               reduce using rule 15 (expression_ops -> expression_ops - expression_ops .)
+    ;               reduce using rule 15 (expression_ops -> expression_ops - expression_ops .)
+    *               shift and go to state 36
+    /               shift and go to state 37
 
-    expression                     shift and go to state 61
-    expr                           shift and go to state 25
-    term                           shift and go to state 26
-    factor                         shift and go to state 27
-    list                           shift and go to state 31
+  ! *               [ reduce using rule 15 (expression_ops -> expression_ops - expression_ops .) ]
+  ! /               [ reduce using rule 15 (expression_ops -> expression_ops - expression_ops .) ]
+  ! +               [ shift and go to state 34 ]
+  ! -               [ shift and go to state 35 ]
+  ! CONCAT          [ shift and go to state 38 ]
+
 
 state 49
 
-    (8) statement_expr -> ESCREVER LPAREN expression RPAREN .
+    (16) expression_ops -> expression_ops * expression_ops .
+    (14) expression_ops -> expression_ops . + expression_ops
+    (15) expression_ops -> expression_ops . - expression_ops
+    (16) expression_ops -> expression_ops . * expression_ops
+    (17) expression_ops -> expression_ops . / expression_ops
+    (18) expression_ops -> expression_ops . CONCAT expression_ops
 
-    SEMI            reduce using rule 8 (statement_expr -> ESCREVER LPAREN expression RPAREN .)
+    +               reduce using rule 16 (expression_ops -> expression_ops * expression_ops .)
+    -               reduce using rule 16 (expression_ops -> expression_ops * expression_ops .)
+    *               reduce using rule 16 (expression_ops -> expression_ops * expression_ops .)
+    /               reduce using rule 16 (expression_ops -> expression_ops * expression_ops .)
+    CONCAT          reduce using rule 16 (expression_ops -> expression_ops * expression_ops .)
+    )               reduce using rule 16 (expression_ops -> expression_ops * expression_ops .)
+    ;               reduce using rule 16 (expression_ops -> expression_ops * expression_ops .)
+
+  ! +               [ shift and go to state 34 ]
+  ! -               [ shift and go to state 35 ]
+  ! *               [ shift and go to state 36 ]
+  ! /               [ shift and go to state 37 ]
+  ! CONCAT          [ shift and go to state 38 ]
 
 
 state 50
 
-    (9) statement_expr -> ALEATORIO LPAREN NUM RPAREN .
+    (17) expression_ops -> expression_ops / expression_ops .
+    (14) expression_ops -> expression_ops . + expression_ops
+    (15) expression_ops -> expression_ops . - expression_ops
+    (16) expression_ops -> expression_ops . * expression_ops
+    (17) expression_ops -> expression_ops . / expression_ops
+    (18) expression_ops -> expression_ops . CONCAT expression_ops
 
-    SEMI            reduce using rule 9 (statement_expr -> ALEATORIO LPAREN NUM RPAREN .)
+    +               reduce using rule 17 (expression_ops -> expression_ops / expression_ops .)
+    -               reduce using rule 17 (expression_ops -> expression_ops / expression_ops .)
+    *               reduce using rule 17 (expression_ops -> expression_ops / expression_ops .)
+    /               reduce using rule 17 (expression_ops -> expression_ops / expression_ops .)
+    CONCAT          reduce using rule 17 (expression_ops -> expression_ops / expression_ops .)
+    )               reduce using rule 17 (expression_ops -> expression_ops / expression_ops .)
+    ;               reduce using rule 17 (expression_ops -> expression_ops / expression_ops .)
+
+  ! +               [ shift and go to state 34 ]
+  ! -               [ shift and go to state 35 ]
+  ! *               [ shift and go to state 36 ]
+  ! /               [ shift and go to state 37 ]
+  ! CONCAT          [ shift and go to state 38 ]
 
 
 state 51
 
-    (33) parameter_list -> VARIAVEL .
+    (18) expression_ops -> expression_ops CONCAT expression_ops .
+    (14) expression_ops -> expression_ops . + expression_ops
+    (15) expression_ops -> expression_ops . - expression_ops
+    (16) expression_ops -> expression_ops . * expression_ops
+    (17) expression_ops -> expression_ops . / expression_ops
+    (18) expression_ops -> expression_ops . CONCAT expression_ops
 
-    RPAREN          reduce using rule 33 (parameter_list -> VARIAVEL .)
-    COMMA           reduce using rule 33 (parameter_list -> VARIAVEL .)
+    CONCAT          reduce using rule 18 (expression_ops -> expression_ops CONCAT expression_ops .)
+    )               reduce using rule 18 (expression_ops -> expression_ops CONCAT expression_ops .)
+    ;               reduce using rule 18 (expression_ops -> expression_ops CONCAT expression_ops .)
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+
+  ! +               [ reduce using rule 18 (expression_ops -> expression_ops CONCAT expression_ops .) ]
+  ! -               [ reduce using rule 18 (expression_ops -> expression_ops CONCAT expression_ops .) ]
+  ! *               [ reduce using rule 18 (expression_ops -> expression_ops CONCAT expression_ops .) ]
+  ! /               [ reduce using rule 18 (expression_ops -> expression_ops CONCAT expression_ops .) ]
+  ! CONCAT          [ shift and go to state 38 ]
 
 
 state 52
 
-    (29) function_declaration -> FUNCAO VARIAVEL LPAREN parameter_list . RPAREN COLON statement_list FIM
-    (34) parameter_list -> parameter_list . COMMA VARIAVEL
+    (29) arg -> NAME , . arg
+    (28) arg -> . NAME
+    (29) arg -> . NAME , arg
 
-    RPAREN          shift and go to state 62
-    COMMA           shift and go to state 63
+    NAME            shift and go to state 40
 
+    arg                            shift and go to state 58
 
 state 53
 
-    (14) expr -> expr PLUS term .
-    (18) term -> term . TIMES factor
-    (19) term -> term . DIVIDE factor
+    (24) funcao -> NAME ( arg ) .
 
-    PLUS            reduce using rule 14 (expr -> expr PLUS term .)
-    MINUS           reduce using rule 14 (expr -> expr PLUS term .)
-    CONCAT          reduce using rule 14 (expr -> expr PLUS term .)
-    SEMI            reduce using rule 14 (expr -> expr PLUS term .)
-    RPAREN          reduce using rule 14 (expr -> expr PLUS term .)
-    COMMA           reduce using rule 14 (expr -> expr PLUS term .)
-    RBRACKET        reduce using rule 14 (expr -> expr PLUS term .)
-    TIMES           shift and go to state 42
-    DIVIDE          shift and go to state 43
+    FIM             reduce using rule 24 (funcao -> NAME ( arg ) .)
 
 
 state 54
 
-    (15) expr -> expr MINUS term .
-    (18) term -> term . TIMES factor
-    (19) term -> term . DIVIDE factor
+    (8) ComandosIniciais -> VARIAVEL = ENTRADA ( ) . ;
 
-    PLUS            reduce using rule 15 (expr -> expr MINUS term .)
-    MINUS           reduce using rule 15 (expr -> expr MINUS term .)
-    CONCAT          reduce using rule 15 (expr -> expr MINUS term .)
-    SEMI            reduce using rule 15 (expr -> expr MINUS term .)
-    RPAREN          reduce using rule 15 (expr -> expr MINUS term .)
-    COMMA           reduce using rule 15 (expr -> expr MINUS term .)
-    RBRACKET        reduce using rule 15 (expr -> expr MINUS term .)
-    TIMES           shift and go to state 42
-    DIVIDE          shift and go to state 43
+    ;               shift and go to state 59
 
 
 state 55
 
-    (16) expr -> expr CONCAT term .
-    (18) term -> term . TIMES factor
-    (19) term -> term . DIVIDE factor
+    (25) func_call -> ALEATORIO ( expression_ops . )
+    (14) expression_ops -> expression_ops . + expression_ops
+    (15) expression_ops -> expression_ops . - expression_ops
+    (16) expression_ops -> expression_ops . * expression_ops
+    (17) expression_ops -> expression_ops . / expression_ops
+    (18) expression_ops -> expression_ops . CONCAT expression_ops
 
-    PLUS            reduce using rule 16 (expr -> expr CONCAT term .)
-    MINUS           reduce using rule 16 (expr -> expr CONCAT term .)
-    CONCAT          reduce using rule 16 (expr -> expr CONCAT term .)
-    SEMI            reduce using rule 16 (expr -> expr CONCAT term .)
-    RPAREN          reduce using rule 16 (expr -> expr CONCAT term .)
-    COMMA           reduce using rule 16 (expr -> expr CONCAT term .)
-    RBRACKET        reduce using rule 16 (expr -> expr CONCAT term .)
-    TIMES           shift and go to state 42
-    DIVIDE          shift and go to state 43
+    )               shift and go to state 60
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    CONCAT          shift and go to state 38
 
 
 state 56
 
-    (18) term -> term TIMES factor .
+    (26) func_call -> ESCREVER ( expression_ops . )
+    (14) expression_ops -> expression_ops . + expression_ops
+    (15) expression_ops -> expression_ops . - expression_ops
+    (16) expression_ops -> expression_ops . * expression_ops
+    (17) expression_ops -> expression_ops . / expression_ops
+    (18) expression_ops -> expression_ops . CONCAT expression_ops
 
-    TIMES           reduce using rule 18 (term -> term TIMES factor .)
-    DIVIDE          reduce using rule 18 (term -> term TIMES factor .)
-    PLUS            reduce using rule 18 (term -> term TIMES factor .)
-    MINUS           reduce using rule 18 (term -> term TIMES factor .)
-    CONCAT          reduce using rule 18 (term -> term TIMES factor .)
-    SEMI            reduce using rule 18 (term -> term TIMES factor .)
-    RPAREN          reduce using rule 18 (term -> term TIMES factor .)
-    COMMA           reduce using rule 18 (term -> term TIMES factor .)
-    RBRACKET        reduce using rule 18 (term -> term TIMES factor .)
+    )               shift and go to state 61
+    +               shift and go to state 34
+    -               shift and go to state 35
+    *               shift and go to state 36
+    /               shift and go to state 37
+    CONCAT          shift and go to state 38
 
 
 state 57
 
-    (19) term -> term DIVIDE factor .
+    (27) func_call -> ESCREVER ( STR . )
+    (21) expression_ops -> STR .
 
-    TIMES           reduce using rule 19 (term -> term DIVIDE factor .)
-    DIVIDE          reduce using rule 19 (term -> term DIVIDE factor .)
-    PLUS            reduce using rule 19 (term -> term DIVIDE factor .)
-    MINUS           reduce using rule 19 (term -> term DIVIDE factor .)
-    CONCAT          reduce using rule 19 (term -> term DIVIDE factor .)
-    SEMI            reduce using rule 19 (term -> term DIVIDE factor .)
-    RPAREN          reduce using rule 19 (term -> term DIVIDE factor .)
-    COMMA           reduce using rule 19 (term -> term DIVIDE factor .)
-    RBRACKET        reduce using rule 19 (term -> term DIVIDE factor .)
+  ! shift/reduce conflict for ) resolved as shift
+    )               shift and go to state 62
+    +               reduce using rule 21 (expression_ops -> STR .)
+    -               reduce using rule 21 (expression_ops -> STR .)
+    *               reduce using rule 21 (expression_ops -> STR .)
+    /               reduce using rule 21 (expression_ops -> STR .)
+    CONCAT          reduce using rule 21 (expression_ops -> STR .)
+
+  ! )               [ reduce using rule 21 (expression_ops -> STR .) ]
 
 
 state 58
 
-    (22) factor -> LPAREN expression RPAREN .
+    (29) arg -> NAME , arg .
 
-    TIMES           reduce using rule 22 (factor -> LPAREN expression RPAREN .)
-    DIVIDE          reduce using rule 22 (factor -> LPAREN expression RPAREN .)
-    PLUS            reduce using rule 22 (factor -> LPAREN expression RPAREN .)
-    MINUS           reduce using rule 22 (factor -> LPAREN expression RPAREN .)
-    CONCAT          reduce using rule 22 (factor -> LPAREN expression RPAREN .)
-    SEMI            reduce using rule 22 (factor -> LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 22 (factor -> LPAREN expression RPAREN .)
-    COMMA           reduce using rule 22 (factor -> LPAREN expression RPAREN .)
-    RBRACKET        reduce using rule 22 (factor -> LPAREN expression RPAREN .)
+    )               reduce using rule 29 (arg -> NAME , arg .)
 
 
 state 59
 
-    (26) list -> LBRACKET elements RBRACKET .
+    (8) ComandosIniciais -> VARIAVEL = ENTRADA ( ) ; .
 
-    TIMES           reduce using rule 26 (list -> LBRACKET elements RBRACKET .)
-    DIVIDE          reduce using rule 26 (list -> LBRACKET elements RBRACKET .)
-    PLUS            reduce using rule 26 (list -> LBRACKET elements RBRACKET .)
-    MINUS           reduce using rule 26 (list -> LBRACKET elements RBRACKET .)
-    CONCAT          reduce using rule 26 (list -> LBRACKET elements RBRACKET .)
-    SEMI            reduce using rule 26 (list -> LBRACKET elements RBRACKET .)
-    RPAREN          reduce using rule 26 (list -> LBRACKET elements RBRACKET .)
-    COMMA           reduce using rule 26 (list -> LBRACKET elements RBRACKET .)
-    RBRACKET        reduce using rule 26 (list -> LBRACKET elements RBRACKET .)
+    ESCREVER        reduce using rule 8 (ComandosIniciais -> VARIAVEL = ENTRADA ( ) ; .)
+    FUNCAO          reduce using rule 8 (ComandosIniciais -> VARIAVEL = ENTRADA ( ) ; .)
+    VARIAVEL        reduce using rule 8 (ComandosIniciais -> VARIAVEL = ENTRADA ( ) ; .)
+    $end            reduce using rule 8 (ComandosIniciais -> VARIAVEL = ENTRADA ( ) ; .)
 
 
 state 60
 
-    (28) elements -> elements COMMA . expression
-    (13) expression -> . expr
-    (14) expr -> . expr PLUS term
-    (15) expr -> . expr MINUS term
-    (16) expr -> . expr CONCAT term
-    (17) expr -> . term
-    (18) term -> . term TIMES factor
-    (19) term -> . term DIVIDE factor
-    (20) term -> . factor
-    (21) factor -> . NUM
-    (22) factor -> . LPAREN expression RPAREN
-    (23) factor -> . STR
-    (24) factor -> . VARIAVEL
-    (25) factor -> . list
-    (26) list -> . LBRACKET elements RBRACKET
+    (25) func_call -> ALEATORIO ( expression_ops ) .
 
-    NUM             shift and go to state 28
-    LPAREN          shift and go to state 29
-    STR             shift and go to state 30
-    VARIAVEL        shift and go to state 23
-    LBRACKET        shift and go to state 32
+    ;               reduce using rule 25 (func_call -> ALEATORIO ( expression_ops ) .)
 
-    expression                     shift and go to state 64
-    expr                           shift and go to state 25
-    term                           shift and go to state 26
-    factor                         shift and go to state 27
-    list                           shift and go to state 31
 
 state 61
 
-    (32) argument_list -> argument_list COMMA expression .
+    (26) func_call -> ESCREVER ( expression_ops ) .
 
-    RPAREN          reduce using rule 32 (argument_list -> argument_list COMMA expression .)
-    COMMA           reduce using rule 32 (argument_list -> argument_list COMMA expression .)
+    ;               reduce using rule 26 (func_call -> ESCREVER ( expression_ops ) .)
 
 
 state 62
 
-    (29) function_declaration -> FUNCAO VARIAVEL LPAREN parameter_list RPAREN . COLON statement_list FIM
+    (27) func_call -> ESCREVER ( STR ) .
 
-    COLON           shift and go to state 65
-
-
-state 63
-
-    (34) parameter_list -> parameter_list COMMA . VARIAVEL
-
-    VARIAVEL        shift and go to state 66
-
-
-state 64
-
-    (28) elements -> elements COMMA expression .
-
-    RBRACKET        reduce using rule 28 (elements -> elements COMMA expression .)
-    COMMA           reduce using rule 28 (elements -> elements COMMA expression .)
-
-
-state 65
-
-    (29) function_declaration -> FUNCAO VARIAVEL LPAREN parameter_list RPAREN COLON . statement_list FIM
-    (2) statement_list -> . statement_list statement
-    (3) statement_list -> . statement
-    (4) statement_list -> . empty
-    (5) statement -> . assignment SEMI
-    (6) statement -> . statement_expr SEMI
-    (7) statement -> . function_declaration
-    (35) empty -> .
-    (12) assignment -> . VARIAVEL EQUALS expression
-    (8) statement_expr -> . ESCREVER LPAREN expression RPAREN
-    (9) statement_expr -> . ALEATORIO LPAREN NUM RPAREN
-    (10) statement_expr -> . ENTRADA LPAREN RPAREN
-    (11) statement_expr -> . function_call
-    (29) function_declaration -> . FUNCAO VARIAVEL LPAREN parameter_list RPAREN COLON statement_list FIM
-    (30) function_call -> . VARIAVEL LPAREN argument_list RPAREN
-
-  ! shift/reduce conflict for VARIAVEL resolved as shift
-  ! shift/reduce conflict for ESCREVER resolved as shift
-  ! shift/reduce conflict for ALEATORIO resolved as shift
-  ! shift/reduce conflict for ENTRADA resolved as shift
-  ! shift/reduce conflict for FUNCAO resolved as shift
-    FIM             reduce using rule 35 (empty -> .)
-    VARIAVEL        shift and go to state 8
-    ESCREVER        shift and go to state 9
-    ALEATORIO       shift and go to state 10
-    ENTRADA         shift and go to state 11
-    FUNCAO          shift and go to state 13
-
-  ! VARIAVEL        [ reduce using rule 35 (empty -> .) ]
-  ! ESCREVER        [ reduce using rule 35 (empty -> .) ]
-  ! ALEATORIO       [ reduce using rule 35 (empty -> .) ]
-  ! ENTRADA         [ reduce using rule 35 (empty -> .) ]
-  ! FUNCAO          [ reduce using rule 35 (empty -> .) ]
-
-    statement_list                 shift and go to state 67
-    statement                      shift and go to state 3
-    empty                          shift and go to state 4
-    assignment                     shift and go to state 5
-    statement_expr                 shift and go to state 6
-    function_declaration           shift and go to state 7
-    function_call                  shift and go to state 12
-
-state 66
-
-    (34) parameter_list -> parameter_list COMMA VARIAVEL .
-
-    RPAREN          reduce using rule 34 (parameter_list -> parameter_list COMMA VARIAVEL .)
-    COMMA           reduce using rule 34 (parameter_list -> parameter_list COMMA VARIAVEL .)
-
-
-state 67
-
-    (29) function_declaration -> FUNCAO VARIAVEL LPAREN parameter_list RPAREN COLON statement_list . FIM
-    (2) statement_list -> statement_list . statement
-    (5) statement -> . assignment SEMI
-    (6) statement -> . statement_expr SEMI
-    (7) statement -> . function_declaration
-    (12) assignment -> . VARIAVEL EQUALS expression
-    (8) statement_expr -> . ESCREVER LPAREN expression RPAREN
-    (9) statement_expr -> . ALEATORIO LPAREN NUM RPAREN
-    (10) statement_expr -> . ENTRADA LPAREN RPAREN
-    (11) statement_expr -> . function_call
-    (29) function_declaration -> . FUNCAO VARIAVEL LPAREN parameter_list RPAREN COLON statement_list FIM
-    (30) function_call -> . VARIAVEL LPAREN argument_list RPAREN
-
-    FIM             shift and go to state 68
-    VARIAVEL        shift and go to state 8
-    ESCREVER        shift and go to state 9
-    ALEATORIO       shift and go to state 10
-    ENTRADA         shift and go to state 11
-    FUNCAO          shift and go to state 13
-
-    statement                      shift and go to state 14
-    assignment                     shift and go to state 5
-    statement_expr                 shift and go to state 6
-    function_declaration           shift and go to state 7
-    function_call                  shift and go to state 12
-
-state 68
-
-    (29) function_declaration -> FUNCAO VARIAVEL LPAREN parameter_list RPAREN COLON statement_list FIM .
-
-    VARIAVEL        reduce using rule 29 (function_declaration -> FUNCAO VARIAVEL LPAREN parameter_list RPAREN COLON statement_list FIM .)
-    ESCREVER        reduce using rule 29 (function_declaration -> FUNCAO VARIAVEL LPAREN parameter_list RPAREN COLON statement_list FIM .)
-    ALEATORIO       reduce using rule 29 (function_declaration -> FUNCAO VARIAVEL LPAREN parameter_list RPAREN COLON statement_list FIM .)
-    ENTRADA         reduce using rule 29 (function_declaration -> FUNCAO VARIAVEL LPAREN parameter_list RPAREN COLON statement_list FIM .)
-    FUNCAO          reduce using rule 29 (function_declaration -> FUNCAO VARIAVEL LPAREN parameter_list RPAREN COLON statement_list FIM .)
-    $end            reduce using rule 29 (function_declaration -> FUNCAO VARIAVEL LPAREN parameter_list RPAREN COLON statement_list FIM .)
-    FIM             reduce using rule 29 (function_declaration -> FUNCAO VARIAVEL LPAREN parameter_list RPAREN COLON statement_list FIM .)
+    ;               reduce using rule 27 (func_call -> ESCREVER ( STR ) .)
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for VARIAVEL in state 0 resolved as shift
-WARNING: shift/reduce conflict for ESCREVER in state 0 resolved as shift
-WARNING: shift/reduce conflict for ALEATORIO in state 0 resolved as shift
-WARNING: shift/reduce conflict for ENTRADA in state 0 resolved as shift
-WARNING: shift/reduce conflict for FUNCAO in state 0 resolved as shift
-WARNING: shift/reduce conflict for VARIAVEL in state 65 resolved as shift
-WARNING: shift/reduce conflict for ESCREVER in state 65 resolved as shift
-WARNING: shift/reduce conflict for ALEATORIO in state 65 resolved as shift
-WARNING: shift/reduce conflict for ENTRADA in state 65 resolved as shift
-WARNING: shift/reduce conflict for FUNCAO in state 65 resolved as shift
+WARNING: shift/reduce conflict for ) in state 57 resolved as shift
+WARNING: reduce/reduce conflict in state 19 resolved using rule (expression -> STR)
+WARNING: rejected rule (expression_ops -> STR) in state 19
+WARNING: reduce/reduce conflict in state 20 resolved using rule (expression -> VARIAVEL)
+WARNING: rejected rule (expression_ops -> VARIAVEL) in state 20

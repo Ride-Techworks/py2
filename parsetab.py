@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftCONCATleftPLUSMINUSleftTIMESDIVIDEALEATORIO COLON COMMA CONCAT DIVIDE ENTRADA EQUALS ESCREVER FIM FUNCAO LBRACKET LPAREN MINUS NUM PLUS RBRACKET RPAREN SEMI STR TIMES VARIAVELprogram : statement_liststatement_list : statement_list statement\n        | statement\n        | emptystatement : assignment SEMI\n        | statement_expr SEMI\n        | function_declarationstatement_expr : ESCREVER LPAREN expression RPAREN\n        | ALEATORIO LPAREN NUM RPAREN\n        | ENTRADA LPAREN RPAREN\n        | function_callassignment : VARIAVEL EQUALS expressionexpression : exprexpr : expr PLUS term\n        | expr MINUS term\n        | expr CONCAT term\n        | termterm : term TIMES factor\n        | term DIVIDE factor\n        | factorfactor : NUM\n        | LPAREN expression RPAREN\n        | STR\n        | VARIAVEL\n        | listlist : LBRACKET elements RBRACKETelements : expression\n        | elements COMMA expressionfunction_declaration : FUNCAO VARIAVEL LPAREN parameter_list RPAREN COLON statement_list FIMfunction_call : VARIAVEL LPAREN argument_list RPARENargument_list : expression\n        | argument_list COMMA expressionparameter_list : VARIAVEL\n        | parameter_list COMMA VARIAVELempty :'
+_lr_signature = "leftCONCATleft+-left*/rightUMINUSALEATORIO CONCAT ENTRADA ESCREVER FIM FUNCAO INTERPOLATED_STR NAME NUM STR VARIAVELRec : StartRec : Rec StartStart : ComandosIniciaisComandosIniciais : ESCREVER escrever ';'\n        | variavel ';'\n        | FUNCAO funcao FIM\n        | VARIAVEL '=' func_call ';'\n        | VARIAVEL '=' ENTRADA '(' ')' ';'\n        escrever : '(' expression ')'variavel : VARIAVEL '=' expressionexpression : expression_ops\n        | STR\n        | VARIAVELexpression_ops : expression_ops '+' expression_ops\n        | expression_ops '-' expression_ops\n        | expression_ops '*' expression_ops\n        | expression_ops '/' expression_ops\n        | expression_ops CONCAT expression_ops\n        | '(' expression_ops ')'\n        | NUM\n        | STR\n        | VARIAVELexpression_ops : '-' expression_ops %prec UMINUS\n        funcao : NAME '(' arg ')'\n        \n        func_call : ALEATORIO '(' expression_ops ')'\n        | ESCREVER '(' expression_ops ')'\n        | ESCREVER '(' STR ')'\n        \n        arg : NAME\n        | NAME ',' arg\n        "
     
-_lr_action_items = {'VARIAVEL':([0,2,3,4,7,13,14,15,16,17,18,19,29,32,38,39,40,41,42,43,48,60,63,65,67,68,],[8,8,-3,-4,-7,22,-2,-5,-6,23,23,23,23,23,51,23,23,23,23,23,23,23,66,8,8,-29,]),'ESCREVER':([0,2,3,4,7,14,15,16,65,67,68,],[9,9,-3,-4,-7,-2,-5,-6,9,9,-29,]),'ALEATORIO':([0,2,3,4,7,14,15,16,65,67,68,],[10,10,-3,-4,-7,-2,-5,-6,10,10,-29,]),'ENTRADA':([0,2,3,4,7,14,15,16,65,67,68,],[11,11,-3,-4,-7,-2,-5,-6,11,11,-29,]),'FUNCAO':([0,2,3,4,7,14,15,16,65,67,68,],[13,13,-3,-4,-7,-2,-5,-6,13,13,-29,]),'$end':([0,1,2,3,4,7,14,15,16,68,],[-35,0,-1,-3,-4,-7,-2,-5,-6,-29,]),'FIM':([3,4,7,14,15,16,65,67,68,],[-3,-4,-7,-2,-5,-6,-35,68,-29,]),'SEMI':([5,6,12,23,24,25,26,27,28,30,31,37,47,49,50,53,54,55,56,57,58,59,],[15,16,-11,-24,-12,-13,-17,-20,-21,-23,-25,-10,-30,-8,-9,-14,-15,-16,-18,-19,-22,-26,]),'EQUALS':([8,],[17,]),'LPAREN':([8,9,10,11,17,18,19,22,29,32,39,40,41,42,43,48,60,],[18,19,20,21,29,29,29,38,29,29,29,29,29,29,29,29,29,]),'NUM':([17,18,19,20,29,32,39,40,41,42,43,48,60,],[28,28,28,36,28,28,28,28,28,28,28,28,28,]),'STR':([17,18,19,29,32,39,40,41,42,43,48,60,],[30,30,30,30,30,30,30,30,30,30,30,30,]),'LBRACKET':([17,18,19,29,32,39,40,41,42,43,48,60,],[32,32,32,32,32,32,32,32,32,32,32,32,]),'RPAREN':([21,23,25,26,27,28,30,31,33,34,35,36,44,51,52,53,54,55,56,57,58,59,61,66,],[37,-24,-13,-17,-20,-21,-23,-25,47,-31,49,50,58,-33,62,-14,-15,-16,-18,-19,-22,-26,-32,-34,]),'TIMES':([23,26,27,28,30,31,53,54,55,56,57,58,59,],[-24,42,-20,-21,-23,-25,42,42,42,-18,-19,-22,-26,]),'DIVIDE':([23,26,27,28,30,31,53,54,55,56,57,58,59,],[-24,43,-20,-21,-23,-25,43,43,43,-18,-19,-22,-26,]),'PLUS':([23,25,26,27,28,30,31,53,54,55,56,57,58,59,],[-24,39,-17,-20,-21,-23,-25,-14,-15,-16,-18,-19,-22,-26,]),'MINUS':([23,25,26,27,28,30,31,53,54,55,56,57,58,59,],[-24,40,-17,-20,-21,-23,-25,-14,-15,-16,-18,-19,-22,-26,]),'CONCAT':([23,25,26,27,28,30,31,53,54,55,56,57,58,59,],[-24,41,-17,-20,-21,-23,-25,-14,-15,-16,-18,-19,-22,-26,]),'COMMA':([23,25,26,27,28,30,31,33,34,45,46,51,52,53,54,55,56,57,58,59,61,64,66,],[-24,-13,-17,-20,-21,-23,-25,48,-31,60,-27,-33,63,-14,-15,-16,-18,-19,-22,-26,-32,-28,-34,]),'RBRACKET':([23,25,26,27,28,30,31,45,46,53,54,55,56,57,58,59,64,],[-24,-13,-17,-20,-21,-23,-25,59,-27,-14,-15,-16,-18,-19,-22,-26,-28,]),'COLON':([62,],[65,]),}
+_lr_action_items = {'ESCREVER':([0,1,2,3,8,11,14,15,23,42,59,],[4,4,-1,-3,-2,-5,29,-4,-6,-7,-8,]),'FUNCAO':([0,1,2,3,8,11,15,23,42,59,],[6,6,-1,-3,-2,-5,-4,-6,-7,-8,]),'VARIAVEL':([0,1,2,3,8,10,11,14,15,16,21,23,34,35,36,37,38,42,44,45,59,],[7,7,-1,-3,-2,20,-5,20,-4,32,32,-6,32,32,32,32,32,-7,32,32,-8,]),'$end':([1,2,3,8,11,15,23,42,59,],[0,-1,-3,-2,-5,-4,-6,-7,-8,]),'(':([4,10,13,14,16,21,26,28,29,34,35,36,37,38,44,45,],[10,16,24,16,16,16,43,44,45,16,16,16,16,16,16,16,]),';':([5,9,18,19,20,22,25,27,31,32,33,39,46,47,48,49,50,51,54,60,61,62,],[11,15,-11,-12,-13,-20,42,-10,-21,-22,-9,-23,-19,-14,-15,-16,-17,-18,59,-25,-26,-27,]),'NAME':([6,24,52,],[13,40,40,]),'=':([7,],[14,]),'STR':([10,14,16,21,34,35,36,37,38,44,45,],[19,19,31,31,31,31,31,31,31,31,57,]),'NUM':([10,14,16,21,34,35,36,37,38,44,45,],[22,22,22,22,22,22,22,22,22,22,22,]),'-':([10,14,16,18,19,20,21,22,30,31,32,34,35,36,37,38,39,44,45,46,47,48,49,50,51,55,56,57,],[21,21,21,35,-21,-22,21,-20,35,-21,-22,21,21,21,21,21,-23,21,21,-19,-14,-15,-16,-17,35,35,35,-21,]),'FIM':([12,53,],[23,-24,]),'ENTRADA':([14,],[26,]),'ALEATORIO':([14,],[28,]),')':([17,18,19,20,22,30,31,32,39,40,41,43,46,47,48,49,50,51,55,56,57,58,],[33,-11,-12,-13,-20,46,-21,-22,-23,-28,53,54,-19,-14,-15,-16,-17,-18,60,61,62,-29,]),'+':([18,19,20,22,30,31,32,39,46,47,48,49,50,51,55,56,57,],[34,-21,-22,-20,34,-21,-22,-23,-19,-14,-15,-16,-17,34,34,34,-21,]),'*':([18,19,20,22,30,31,32,39,46,47,48,49,50,51,55,56,57,],[36,-21,-22,-20,36,-21,-22,-23,-19,36,36,-16,-17,36,36,36,-21,]),'/':([18,19,20,22,30,31,32,39,46,47,48,49,50,51,55,56,57,],[37,-21,-22,-20,37,-21,-22,-23,-19,37,37,-16,-17,37,37,37,-21,]),'CONCAT':([18,19,20,22,30,31,32,39,46,47,48,49,50,51,55,56,57,],[38,-21,-22,-20,38,-21,-22,-23,-19,-14,-15,-16,-17,-18,38,38,-21,]),',':([40,],[52,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'program':([0,],[1,]),'statement_list':([0,65,],[2,67,]),'statement':([0,2,65,67,],[3,14,3,14,]),'empty':([0,65,],[4,4,]),'assignment':([0,2,65,67,],[5,5,5,5,]),'statement_expr':([0,2,65,67,],[6,6,6,6,]),'function_declaration':([0,2,65,67,],[7,7,7,7,]),'function_call':([0,2,65,67,],[12,12,12,12,]),'expression':([17,18,19,29,32,48,60,],[24,34,35,44,46,61,64,]),'expr':([17,18,19,29,32,48,60,],[25,25,25,25,25,25,25,]),'term':([17,18,19,29,32,39,40,41,48,60,],[26,26,26,26,26,53,54,55,26,26,]),'factor':([17,18,19,29,32,39,40,41,42,43,48,60,],[27,27,27,27,27,27,27,27,56,57,27,27,]),'list':([17,18,19,29,32,39,40,41,42,43,48,60,],[31,31,31,31,31,31,31,31,31,31,31,31,]),'argument_list':([18,],[33,]),'elements':([32,],[45,]),'parameter_list':([38,],[52,]),}
+_lr_goto_items = {'Rec':([0,],[1,]),'Start':([0,1,],[2,8,]),'ComandosIniciais':([0,1,],[3,3,]),'variavel':([0,1,],[5,5,]),'escrever':([4,],[9,]),'funcao':([6,],[12,]),'expression':([10,14,],[17,27,]),'expression_ops':([10,14,16,21,34,35,36,37,38,44,45,],[18,18,30,39,47,48,49,50,51,55,56,]),'func_call':([14,],[25,]),'arg':([24,52,],[41,58,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,40 +26,34 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> program","S'",1,None,None,None),
-  ('program -> statement_list','program',1,'p_program','grammar.py',33),
-  ('statement_list -> statement_list statement','statement_list',2,'p_statement_list','grammar.py',38),
-  ('statement_list -> statement','statement_list',1,'p_statement_list','grammar.py',39),
-  ('statement_list -> empty','statement_list',1,'p_statement_list','grammar.py',40),
-  ('statement -> assignment SEMI','statement',2,'p_statement','grammar.py',53),
-  ('statement -> statement_expr SEMI','statement',2,'p_statement','grammar.py',54),
-  ('statement -> function_declaration','statement',1,'p_statement','grammar.py',55),
-  ('statement_expr -> ESCREVER LPAREN expression RPAREN','statement_expr',4,'p_statement_expr','grammar.py',64),
-  ('statement_expr -> ALEATORIO LPAREN NUM RPAREN','statement_expr',4,'p_statement_expr','grammar.py',65),
-  ('statement_expr -> ENTRADA LPAREN RPAREN','statement_expr',3,'p_statement_expr','grammar.py',66),
-  ('statement_expr -> function_call','statement_expr',1,'p_statement_expr','grammar.py',67),
-  ('assignment -> VARIAVEL EQUALS expression','assignment',3,'p_assignment','grammar.py',89),
-  ('expression -> expr','expression',1,'p_expression','grammar.py',94),
-  ('expr -> expr PLUS term','expr',3,'p_expr','grammar.py',98),
-  ('expr -> expr MINUS term','expr',3,'p_expr','grammar.py',99),
-  ('expr -> expr CONCAT term','expr',3,'p_expr','grammar.py',100),
-  ('expr -> term','expr',1,'p_expr','grammar.py',101),
-  ('term -> term TIMES factor','term',3,'p_term','grammar.py',116),
-  ('term -> term DIVIDE factor','term',3,'p_term','grammar.py',117),
-  ('term -> factor','term',1,'p_term','grammar.py',118),
-  ('factor -> NUM','factor',1,'p_factor','grammar.py',130),
-  ('factor -> LPAREN expression RPAREN','factor',3,'p_factor','grammar.py',131),
-  ('factor -> STR','factor',1,'p_factor','grammar.py',132),
-  ('factor -> VARIAVEL','factor',1,'p_factor','grammar.py',133),
-  ('factor -> list','factor',1,'p_factor','grammar.py',134),
-  ('list -> LBRACKET elements RBRACKET','list',3,'p_list','grammar.py',150),
-  ('elements -> expression','elements',1,'p_elements','grammar.py',155),
-  ('elements -> elements COMMA expression','elements',3,'p_elements','grammar.py',156),
-  ('function_declaration -> FUNCAO VARIAVEL LPAREN parameter_list RPAREN COLON statement_list FIM','function_declaration',8,'p_function_declaration','grammar.py',166),
-  ('function_call -> VARIAVEL LPAREN argument_list RPAREN','function_call',4,'p_function_call','grammar.py',171),
-  ('argument_list -> expression','argument_list',1,'p_argument_list','grammar.py',176),
-  ('argument_list -> argument_list COMMA expression','argument_list',3,'p_argument_list','grammar.py',177),
-  ('parameter_list -> VARIAVEL','parameter_list',1,'p_parameter_list','grammar.py',186),
-  ('parameter_list -> parameter_list COMMA VARIAVEL','parameter_list',3,'p_parameter_list','grammar.py',187),
-  ('empty -> <empty>','empty',0,'p_empty','grammar.py',196),
+  ("S' -> Rec","S'",1,None,None,None),
+  ('Rec -> Start','Rec',1,'p_Rec0','grammar.py',24),
+  ('Rec -> Rec Start','Rec',2,'p_Rec1','grammar.py',28),
+  ('Start -> ComandosIniciais','Start',1,'p_Start','grammar.py',33),
+  ('ComandosIniciais -> ESCREVER escrever ;','ComandosIniciais',3,'p_ComandosIniciais','grammar.py',37),
+  ('ComandosIniciais -> variavel ;','ComandosIniciais',2,'p_ComandosIniciais','grammar.py',38),
+  ('ComandosIniciais -> FUNCAO funcao FIM','ComandosIniciais',3,'p_ComandosIniciais','grammar.py',39),
+  ('ComandosIniciais -> VARIAVEL = func_call ;','ComandosIniciais',4,'p_ComandosIniciais','grammar.py',40),
+  ('ComandosIniciais -> VARIAVEL = ENTRADA ( ) ;','ComandosIniciais',6,'p_ComandosIniciais','grammar.py',41),
+  ('escrever -> ( expression )','escrever',3,'p_escrever','grammar.py',69),
+  ('variavel -> VARIAVEL = expression','variavel',3,'p_variavel','grammar.py',73),
+  ('expression -> expression_ops','expression',1,'p_expression','grammar.py',79),
+  ('expression -> STR','expression',1,'p_expression','grammar.py',80),
+  ('expression -> VARIAVEL','expression',1,'p_expression','grammar.py',81),
+  ('expression_ops -> expression_ops + expression_ops','expression_ops',3,'p_expression_ops','grammar.py',88),
+  ('expression_ops -> expression_ops - expression_ops','expression_ops',3,'p_expression_ops','grammar.py',89),
+  ('expression_ops -> expression_ops * expression_ops','expression_ops',3,'p_expression_ops','grammar.py',90),
+  ('expression_ops -> expression_ops / expression_ops','expression_ops',3,'p_expression_ops','grammar.py',91),
+  ('expression_ops -> expression_ops CONCAT expression_ops','expression_ops',3,'p_expression_ops','grammar.py',92),
+  ('expression_ops -> ( expression_ops )','expression_ops',3,'p_expression_ops','grammar.py',93),
+  ('expression_ops -> NUM','expression_ops',1,'p_expression_ops','grammar.py',94),
+  ('expression_ops -> STR','expression_ops',1,'p_expression_ops','grammar.py',95),
+  ('expression_ops -> VARIAVEL','expression_ops',1,'p_expression_ops','grammar.py',96),
+  ('expression_ops -> - expression_ops','expression_ops',2,'p_expression_uminus','grammar.py',137),
+  ('funcao -> NAME ( arg )','funcao',4,'p_funcao','grammar.py',142),
+  ('func_call -> ALEATORIO ( expression_ops )','func_call',4,'p_func_call','grammar.py',148),
+  ('func_call -> ESCREVER ( expression_ops )','func_call',4,'p_func_call','grammar.py',149),
+  ('func_call -> ESCREVER ( STR )','func_call',4,'p_func_call','grammar.py',150),
+  ('arg -> NAME','arg',1,'p_arg','grammar.py',161),
+  ('arg -> NAME , arg','arg',3,'p_arg','grammar.py',162),
 ]

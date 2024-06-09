@@ -4,18 +4,20 @@ import os
 
 class Utils:
     @staticmethod
-    def read_lang_file(file_path):
-        if os.path.exists(file_path) == False:
-            raise Exception(f"File {file_path} not found.")
+    def read_lang_file(file_path: str) -> str:
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f"File {file_path} not found.")
 
         with open(file_path, "r", encoding="utf-8") as file:
             return file.read()
 
-    def has_interpolation(text):
+    @staticmethod
+    def has_interpolation(text: str) -> bool:
         return re.search(r"#\{[a-zA-Z0-9_]+\}", text)
 
-    def replace_interpolation(text, variables):
-        for key in variables:
-            text = text.replace(f"#{{{key}}}", str(variables[key]))
+    @staticmethod
+    def replace_interpolation(text: str, variables: dict) -> str:
+        for key, value in variables.items():
+            text = text.replace(f"#{{{key}}}", str(value))
 
         return text

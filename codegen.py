@@ -1,59 +1,37 @@
-class CodeGenerator:
+class CodeGen:
     def __init__(self):
         self.code = []
+        self.variables = {}
 
-    def generate(self, node):
-        if node.type == "program":
-            for child in node.children:
-                self.generate(child)
-        elif node.type == "assignment":
-            value = self.generate(node.children[0])
-            self.code.append(f"{node.value} = {value};")
-        elif node.type == "binop":
-            left = self.generate(node.children[0])
-            right = self.generate(node.children[1])
-            return f"({left} {node.value} {right})"
-        elif node.type == "number":
-            return str(node.value)
-        elif node.type == "string":
-            return node.value
-        elif node.type == "variable":
-            return node.value
-        elif node.type == "list":
-            return (
-                "[" + ", ".join(self.generate(child) for child in node.children) + "]"
-            )
-        elif node.type == "escrever":
-            value = self.generate(node.children[0])
-            self.code.append(f'printf("{value}\\n");')
-        elif node.type == "function":
-            params = ", ".join(node.children[0])
-            body = "\n".join(self.generate(statement) for statement in node.children[1])
-            self.code.append(f"void {node.value}({params}) {{\n{body}\n}}")
-        elif node.type == "function_call":
-            args = ", ".join(self.generate(arg) for arg in node.children)
-            self.code.append(f"{node.value}({args});")
-        else:
-            raise Exception(f"Unknown node type: {node.type}")
-
-    def get_code(self):
+    def generate(self, parsed_data):
+        self.code.append("#include <stdio.h>")
+        self.code.append("int main() {")
+        for statement in parsed_data:
+            self.code.append("    " + self._generate_statement(statement) + ";")
+        self.code.append("    return 0;")
+        self.code.append("}")
         return "\n".join(self.code)
 
+    def _generate_statement(self, statement):
+        if statement['op'] == 'print':
+            return f'printf("%d\\n", {self._generate_expression(statement["value"])})'
+        elif statement['op'] == 'declare':
+            if statement["var_name"] not in self.variables:
+                self.variables[statement["var_name"]] = "int"
+            return f'int {statement["var_name"]} = {self._generate_expression(statement["value"])}'
+        elif statement['op'] == 'func_declare':
+            func_args = ", ".join(f"int {arg}" for arg in statement['args'])
+            func_body = ";\n    ".join(self._generate_statement(line) for line in statement['body'])
+            return f'int {statement["func_name"]}({func_args}) {{\n    {func_body};\n}}'
+        elif statement['op'] == 'map':
+            return f'map({statement["func"]}, {self._generate_expression(statement["list"])})'
+        elif statement['op'] == 'fold':
+            return f'fold({statement["func"]}, {self._generate_expression(statement["initial"])}, {self._generate_expression(statement["list"])})'
+        return ""
 
-# Test the code generator
-if __name__ == "__main__":
-    from grammar import Parser
-
-    parser = Parser()
-    codegen = CodeGenerator()
-
-    data = """
-    ESCREVER("Hello, World!");
-    a = 3 + 4 * 10;
-    b = a / 2;
-    ESCREVER(a);
-    FUNCAO soma(a, b): a + b;
-    """
-    ast = parser.parse(data)
-    codegen.generate(ast)
-    print(codegen.get_code())
+    def _generate_expression(self, expression):
+        if isinstance(expression, dict):
+            if expression['op'] == 'UMINUS':
+                return f'-{self._generate_expression(expression["value"])}'
+            return f'({self._generate_expression(expression["left"])} {expression["op"]} {self._generate_expression(expression["right"])})'
+        return str(expression)

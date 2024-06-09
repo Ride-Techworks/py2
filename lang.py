@@ -1,5 +1,9 @@
+from typing import Tuple
+
+
 class Lang:
-    tokens = (
+    tokens: Tuple[str, ...] = (
+        "ATRIBUICAO",
         "NUM",
         "VARIAVEL",
         "STR",
@@ -10,8 +14,16 @@ class Lang:
         "ESCREVER",
         "ENTRADA",
         "CONCAT",
+        "PARENTESES_ESQ",
+        "PARENTESES_DIR",
+        "OPERADOR_ARITMETICO",
+        "PONTO_E_VIRGULA",
+        'COLCHETES_ESQ',
+        'COLCHETES_DIR',
+        'MAP',
+        'FOLD',
     )
-    literals = (
+    literals: Tuple[str, ...] = (
         "(",
         ")",
         "*",
@@ -33,5 +45,5 @@ class Lang:
         "[",
         "]",
     )
-    t_ignore = " \n\t"
-    t_multilinecomment_ignore = " \t"
+    t_ignore: str = " \n\t"
+    t_multilinecomment_ignore: str = " \t"

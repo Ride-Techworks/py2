@@ -1,12 +1,11 @@
 import sys
 from utils import Utils
 from grammar import ArithGrammar
-from codegen import CodeGenerator
+from codegen import CodeGen
 from interpreter import Interpreter
 
-
 def main():
-    variables = {}
+    variaveis = {}
     if len(sys.argv) != 2:
         print("Usage: python main.py <input_file>")
         return
@@ -17,23 +16,24 @@ def main():
     parser = ArithGrammar()
     parser.build()
     interpreter = Interpreter()
-    codegen = CodeGenerator()
+    codegen = CodeGen()
 
-    ast = parser.parse(data, variables)
+    ast = parser.parse(data, variaveis)
 
     if ast is not None:
         # Interpret the input
+        print("AST:")
         print(ast)
+        print("\nInterpreted Output:")
+        interpreter = Interpreter()
+        interpreter.eval(ast)
 
-        # Generate C code
-        """ interpreter.eval(ast)
-        codegen.generate(ast)
-        c_code = codegen.get_code()
-        print("Generated C Code:")
-        print(c_code) """
+        # Generate Python code
+        generated_code = codegen.generate(ast)
+        print("\nGenerated C Code:")
+        print(generated_code)
     else:
         print("Parsing failed.")
-
 
 if __name__ == "__main__":
     main()

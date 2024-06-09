@@ -1,68 +1,105 @@
+import random
+
+from grammar import ArithGrammar
+
+
 class Interpreter:
     def __init__(self):
         self.variables = {}
         self.functions = {}
 
     def eval(self, node):
-        if node.type == 'program':
-            for child in node.children:
-                self.eval(child)
-        elif node.type == 'assignment':
-            self.variables[node.value] = self.eval(node.children[0])
-        elif node.type == 'binop':
-            left = self.eval(node.children[0])
-            right = self.eval(node.children[1])
-            if node.value == '+':
-                return left + right
-            elif node.value == '-':
-                return left - right
-            elif node.value == '*':
-                return left * right
-            elif node.value == '/':
-                return left / right
-        elif node.type == 'number':
-            return node.value
-        elif node.type == 'string':
-            return node.value
-        elif node.type == 'variable':
-            return self.variables.get(node.value, 0)
-        elif node.type == 'list':
-            return [self.eval(child) for child in node.children]
-        elif node.type == 'escrever':
-            value = self.eval(node.children[0])
-            print(value)
-        elif node.type == 'function':
-            self.functions[node.value] = node
-        elif node.type == 'function_call':
-            func = self.functions.get(node.value)
-            if not func:
-                raise Exception(f"Function {node.value} not defined")
-            params = func.children[0]
-            body = func.children[1]
-            local_vars = {params[i]: self.eval(node.children[i]) for i in range(len(params))}
-            old_vars = self.variables
-            self.variables = local_vars
-            for stmt in body:
-                self.eval(stmt)
-            result = self.variables.get('return')
-            self.variables = old_vars
-            return result
+        if isinstance(node, list):
+            results = []
+            for child in node:
+                results.append(self.eval(child))
+            return results
+        elif isinstance(node, dict):
+            if node['op'] == 'declare':
+                self.variables[node['var_name']] = self.eval(node['value'])
+            elif node['op'] == 'print':
+                value = self.eval(node['value'])
+                print(value)
+            elif node['op'] == 'func_declare':
+                self.functions[node['func_name']] = node
+            elif node['op'] == 'func_call':
+                func = self.functions.get(node['func_call'])
+                if not func:
+                    raise Exception(f"Function {node['func_call']} not defined")
+                params = func['args']
+                body = func['body']
+                local_vars = {params[i]: self.eval(node['args'][i]) for i in range(len(params))}
+                old_vars = self.variables
+                self.variables = local_vars
+                result = None
+                if isinstance(body, list):
+                    for stmt in body:
+                        result = self.eval(stmt)
+                else:
+                    result = self.eval(body)
+                self.variables = old_vars
+                return result
+            elif node['op'] in {'+', '-', '*', '/'}:
+                left = self.eval(node['left'])
+                right = self.eval(node['right'])
+                if node['op'] == '+':
+                    return left + right
+                elif node['op'] == '-':
+                    return left - right
+                elif node['op'] == '*':
+                    return left * right
+                elif node['op'] == '/':
+                    return left / right
+            elif node['op'] == 'map':
+                func = self.functions.get(node['func'])
+                if not func:
+                    raise Exception(f"Function {node['func']} not defined")
+                lst = self.eval(node['list'])
+                if lst is None:
+                    lst = []
+                return [self.eval({'op': 'func_call', 'func_call': node['func'], 'args': [item]}) for item in lst]
+            elif node['op'] == 'fold':
+                func = self.functions.get(node['func'])
+                if not func:
+                    raise Exception(f"Function {node['func']} not defined")
+                result = self.eval(node['initial'])
+                for item in self.eval(node['list']):
+                    result = self.eval({'op': 'func_call', 'func_call': node['func'], 'args': [result, item]})
+                return result
+            elif isinstance(node, dict) and node.get('func') == 'ALEATORIO':
+                return random.randint(0, node['args'])
+            elif isinstance(node, dict) and 'value' in node:
+                return node['value']
+        elif isinstance(node, int) or isinstance(node, str):
+            return node
         else:
-            raise Exception(f"Unknown node type: {node.type}")
+            raise Exception(f"Unknown node type: {node}")
 
-# Test the interpreter
-if __name__ == "__main__":
-    from grammar import Parser
-    parser = Parser()
+
+def main():
+    input_code = """
+    FUNC mais2(x) : x + 2;
+    FUNC soma(a, b) : a + b;
+    lista1 = MAP(mais2, []);
+    lista2 = MAP(mais2, [1, 2, 3]);
+    lista3 = FOLD(soma, 0, [1, 2, 3]);
+    ESCREVER(MAP(mais2, [1, 2, 3]));
+    ESCREVER(FOLD(soma, 0, [1, 2, 3]));
+    """
+
+    # Initialize the parser
+    parser = ArithGrammar()
+    parser.build()
+
+    # Parse the input code
+    parsed_code = parser.parse(input_code, {})
+
+    # Initialize the interpreter
     interpreter = Interpreter()
 
-    data = '''
-    ESCREVER("Hello, World!");
-    a = 3 + 4 * 10;
-    b = a / 2;
-    ESCREVER(a);
-    FUNCAO soma(a, b): a + b;
-    '''
-    ast = parser.parse(data)
-    interpreter.eval(ast)
-    print(interpreter.variables)
+    # Evaluate the parsed code
+    interpreter.eval(parsed_code)
+
+if __name__ == "__main__":
+    main()
+

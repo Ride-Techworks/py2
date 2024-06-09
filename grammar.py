@@ -58,8 +58,6 @@ class ArithGrammar:
             else:
                 p[0] = {"op": "print", "value": p[2]}
                 print(p[2])
-        elif len(p) == 7 and p[3] == "ENTRADA":
-            self._variables[p[1]] = input("Enter value: ")
 
         elif (
             len(p) == 5
